@@ -3,7 +3,27 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/drawable/buy_now_bg.xml" value="0.1" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/drawable/circleindicator_custome.xml" value="0.1" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/drawable/circleindicator_round.xml" value="0.1" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/drawable/view_bg.xml" value="0.1" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/activity_all_category.xml" value="0.1" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/activity_login_tab_fragment.xml" value="0.1" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/activity_main.xml" value="0.10277777777777777" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/activity_product_detail.xml" value="0.1" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/discounted_item.xml" value="0.1796875" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/fragment_cart.xml" value="0.1" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/fragment_login_signup.xml" value="0.1" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/fragment_login_tab.xml" value="0.1" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/fragment_signup_tab.xml" value="0.1" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/item_all_category.xml" value="0.1796875" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/item_cart.xml" value="0.1796875" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/item_category.xml" value="0.1796875" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/item_discounted.xml" value="0.1" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/item_recently.xml" value="0.1796875" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/item_slider_image.xml" value="0.1796875" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/menu/menu_bottom.xml" value="0.1" />
       </map>
     </option>
   </component>
