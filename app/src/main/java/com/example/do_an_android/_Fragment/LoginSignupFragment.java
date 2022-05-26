@@ -44,7 +44,7 @@ public class LoginSignupFragment extends Fragment {
 
         tabLayout.setupWithViewPager(viewPager);
         viewpagerAdapter.addFragment(new LoginTabFragment(), "Đăng nhập");
-        viewpagerAdapter.addFragment(new SignupTabFragment(), "Đăng kí");
+        viewpagerAdapter.addFragment(new SignupTabFragment(context), "Đăng kí");
         viewPager.setAdapter(viewpagerAdapter);
     }
 

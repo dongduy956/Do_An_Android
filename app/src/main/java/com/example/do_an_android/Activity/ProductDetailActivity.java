@@ -5,58 +5,67 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.do_an_android.Model.ProductModel;
+import com.example.do_an_android.Model.Server;
 import com.example.do_an_android.R;
+import com.squareup.picasso.Picasso;
 
 
-public class ProductDetailActivity extends AppCompatActivity {
-    ImageView img, back;
-    TextView proName, proPrice, proDesc, proQty, proUnit;
+public class ProductDetailActivity extends AppCompatActivity implements View.OnClickListener {
+    ImageView back, imageProductDetail;
+    TextView nameProductDetail, priceProductDetail, priceDiscountProductDetail, descriptionProdcutDetail;
+    EditText quantityProductDetail;
+    Button btnBuyNow, btnAddCart;
 
-    String name, price, desc, qty, unit;
-    int image;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
-        Intent i = getIntent();
+        setControl();
+        loadData();
+        back.setOnClickListener(this);
+    }
 
-        name = i.getStringExtra("name");
-        image = i.getIntExtra("image", R.drawable.b1);
-        price = i.getStringExtra("price");
-        desc = i.getStringExtra("desc");
-        qty = i.getStringExtra("qty");
-        unit = i.getStringExtra("unit");
+    private void loadData() {
+        ProductModel productModel= (ProductModel) getIntent().getSerializableExtra("productDetail");
+        Picasso.get().load(Server.urlImage+productModel.getImage()).into(imageProductDetail);
+        nameProductDetail.setText(productModel.getName());
+        priceProductDetail.setText(productModel.getPrice()+"");
+        priceDiscountProductDetail.setText(productModel.getPrice_discounted()+"");
+        descriptionProdcutDetail.setText(productModel.getDescription());
 
-        proName = findViewById(R.id.productName);
-        proDesc = findViewById(R.id.prodDesc);
-        proPrice = findViewById(R.id.prodPrice);
-        img = findViewById(R.id.big_image);
-        back = findViewById(R.id.back2);
-        proQty = findViewById(R.id.qty);
-        proUnit = findViewById(R.id.unit);
+    }
 
-        proName.setText(name);
-        proPrice.setText(price);
-        proDesc.setText(desc);
-        proQty.setText(qty);
-        proUnit.setText(unit);
+    private void setControl() {
+        back = findViewById(R.id.backProductDetail);
+        imageProductDetail = findViewById(R.id.imageProductDetail);
+        nameProductDetail = findViewById(R.id.nameProductDetail);
+        priceProductDetail = findViewById(R.id.priceProductDetail);
+        priceDiscountProductDetail = findViewById(R.id.priceDiscountProductDetail);
+        descriptionProdcutDetail = findViewById(R.id.descriptionProdcutDetail);
+        quantityProductDetail = findViewById(R.id.quantityProductDetail);
+        btnBuyNow = findViewById(R.id.btnBuyNow);
+        btnAddCart = findViewById(R.id.btnAddCart);
+    }
 
-
-        img.setImageResource(image);
-
-
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+        switch (id) {
+            case R.id.backProductDetail:
                 Intent i = new Intent(ProductDetailActivity.this, MainActivity.class);
                 startActivity(i);
                 finish();
-
-            }
-        });
+                break;
+            case  R.id.btnAddCart:
+                break;
+            case  R.id.btnBuyNow:
+                break;
+        }
     }
 }

@@ -24,6 +24,7 @@
                 >
 
                 <androidx.appcompat.widget.SearchView
+                    android:id="@+id/searchview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
@@ -64,7 +65,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/viewPager" />
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/txtTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="48dp"
@@ -76,33 +77,9 @@
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/circleindicator" />
-
-
+<!--Type product-->
                     <TextView
-                        android:id="@+id/textView3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="24dp"
-                        android:fontFamily="@font/open_sans_semibold"
-                        android:text="Sản phẩm giảm giá"
-                        android:textColor="@android:color/background_dark"
-                        android:textSize="16sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/discountedRecycler"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-                    <TextView
-                        android:id="@+id/textView4"
+                        android:id="@+id/txtTypeProduct"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
@@ -112,8 +89,18 @@
                         android:textColor="@android:color/background_dark"
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/discountedRecycler" />
-
+                        app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
+                    <TextView
+                        android:id="@+id/allCategoryMore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:fontFamily="@font/open_sans_semibold"
+                        android:text="Xem thêm"
+                        android:textColor="#448AFF"
+                        app:layout_constraintBottom_toBottomOf="@+id/txtTypeProduct"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/txtTypeProduct" />
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/categoryRecycler"
                         android:layout_width="0dp"
@@ -121,22 +108,37 @@
                         android:layout_marginTop="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                        app:layout_constraintTop_toBottomOf="@+id/allCategoryMore" />
 
+
+<!--Discount-->
                     <TextView
-                        android:id="@+id/allCategoryImage"
+                        android:id="@+id/txtDiscount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
                         android:fontFamily="@font/open_sans_semibold"
-                        android:text="Xem thêm"
-                        android:textColor="#448AFF"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView4"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/textView4" />
+                        android:text="Sản phẩm giảm giá"
+                        android:textColor="@android:color/background_dark"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/categoryRecycler" />
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/discountedRecycler"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/txtDiscount" />
+
+
+<!--Recently-->
                     <TextView
-                        android:id="@+id/textView6"
+                        android:id="@+id/txtRecently"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
@@ -146,7 +148,7 @@
                         android:textColor="@android:color/background_dark"
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/categoryRecycler" />
+                        app:layout_constraintTop_toBottomOf="@+id/discountedRecycler" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recently_item"
@@ -155,7 +157,7 @@
                         android:layout_marginTop="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                        app:layout_constraintTop_toBottomOf="@+id/txtRecently" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </ScrollView>
 

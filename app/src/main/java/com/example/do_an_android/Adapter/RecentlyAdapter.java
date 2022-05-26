@@ -2,6 +2,7 @@ package com.example.do_an_android.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.do_an_android.Activity.ProductDetailActivity;
 import com.example.do_an_android.Model.ProductModel;
 import com.example.do_an_android.Model.Server;
 import com.example.do_an_android.R;
@@ -47,23 +49,17 @@ public class RecentlyAdapter extends RecyclerView.Adapter<RecentlyAdapter.Recent
         Log.d("haha", "onBindViewHolder: "+productModel.getImage());
         Picasso.get().load(Server.urlImage+productModel.getImage()).into(holder.recentlyImageView);
         holder.recentlyName.setText(productModel.getName());
-//
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i=new Intent(context, ProductDetailActivity.class);
-//                i.putExtra("name", recentlyViewedList.get(position).getName());
-//                i.putExtra("image", recentlyViewedList.get(position).getBigimageurl());
-//                i.putExtra("price",recentlyViewedList.get(position).getPrice());
-//                i.putExtra("desc",recentlyViewedList.get(position).getDescription());
-//                i.putExtra("qty",recentlyViewedList.get(position).getQuantity());
-//                i.putExtra("unit",recentlyViewedList.get(position).getUnit());
-//                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                context.startActivity(i);
-//                Log.d("duy", "onClick: ");
-//
-//            }
-//        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(context, ProductDetailActivity.class);
+                intent.putExtra("productDetail",productModel);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+
+            }
+        });
 
     }
 

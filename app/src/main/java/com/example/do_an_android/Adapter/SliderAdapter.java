@@ -10,16 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
+import com.example.do_an_android.Model.Server;
 import com.example.do_an_android.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class SliderAdapter extends PagerAdapter {
     Context context;
     int layout;
-    ArrayList<Integer> listImage;
+    ArrayList<String> listImage;
 
-    public SliderAdapter(Context context, int layout, ArrayList<Integer> listImage) {
+    public SliderAdapter(Context context, int layout, ArrayList<String> listImage) {
         this.context = context;
         this.layout = layout;
         this.listImage = listImage;
@@ -30,8 +32,8 @@ public class SliderAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         View view = LayoutInflater.from(container.getContext()).inflate(layout, container, false);
         ImageView image = view.findViewById(R.id.slider_image);
-        int slider_item = listImage.get(position);
-        Glide.with(context).load(slider_item).into(image);
+
+        Glide.with(context).load(Server.urlImage+listImage.get(position)).into(image);
         container.addView(view);
         return view;
     }

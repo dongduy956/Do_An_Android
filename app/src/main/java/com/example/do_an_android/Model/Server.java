@@ -1,8 +1,13 @@
 package com.example.do_an_android.Model;
 
 public class Server {
-    public static String urlImage="http://192.168.0.106:8089/doan/hinhanh/";
-    public static String urlTypeProduct="http://192.168.0.106:8089/doan/getTypeProducts.php";
-    public static String urlProductsDiscounted="http://192.168.0.106:8089/doan/getProductsDiscounted.php";
-    public static String urlProductsRecently="http://192.168.0.106:8089/doan/getProductsRecently.php";
+    private static String urlBase="http://192.168.0.106:8089/doan/";
+    public static String urlImage=urlBase+"hinhanh/";
+    public static String urlTypeProduct=urlBase+"getTypeProducts.php";
+    public static String urlProductsDiscounted=urlBase+"getProductsDiscounted.php";
+    public static String urlProductsRecently=urlBase+"getProductsRecently.php";
+    public static String urlProductsOfType=urlBase+"getProductOfType.php";
+    public static String urlBanner=urlBase+"getBanners.php";
+    public static String urlSearch=urlBase+"search.php";
+    public static String urlSignup=urlBase+"signup.php";
 }

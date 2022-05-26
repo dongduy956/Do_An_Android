@@ -6,14 +6,17 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +28,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.do_an_android.Activity.AllCategoryActivity;
+import com.example.do_an_android.Activity.ProductsOfTypeActivity;
 import com.example.do_an_android.Adapter.CategoryAdapter;
 import com.example.do_an_android.Adapter.DiscountedProductAdapter;
 import com.example.do_an_android.Adapter.RecentlyAdapter;
@@ -45,7 +49,7 @@ import java.util.TimerTask;
 
 import me.relex.circleindicator.CircleIndicator;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener {
 
     Context context;
     RecyclerView discountRecyclerView, categoryRecyclerView, recentlyViewedRecycler;
@@ -58,22 +62,25 @@ public class HomeFragment extends Fragment {
     RecentlyAdapter recentlyViewedAdapter;
     ArrayList<ProductModel> recentlyViewedList;
 
-    TextView allCategory;
+    TextView allCategoryMore;
     ViewPager viewPager;
     CircleIndicator circleIndicator;
     SliderAdapter sliderAdapter;
-    ArrayList listImage;
+    ArrayList<String> listImage;
     Timer timer;
     Toolbar toolbar;
+    SearchView searchView;
 
     public HomeFragment(Context context) {
         this.context = context;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -81,42 +88,82 @@ public class HomeFragment extends Fragment {
         addDataDiscounted();
         addDataCategory();
         addDataRecenly();
+//banner
+        setAdapterSlider();
+        loadImageSlider();
 
-        listImage = getImageSlider();
-        sliderAdapter = new SliderAdapter(context, R.layout.item_slider_image, listImage);
-        viewPager.setAdapter(sliderAdapter);
-       circleIndicator.setViewPager(viewPager);
-        sliderAdapter.registerDataSetObserver(circleIndicator.getDataSetObserver());
-        autoSliderImage();
 
+//set icon home
         toolbar.setNavigationIcon(R.drawable.ic_baseline_home_24);
-
-        allCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(context, AllCategoryActivity.class);
-                startActivity(i);
-            }
-        });
 
 
         setDiscountedRecycler();
         setCategoryRecycler();
         setRecentlyViewedRecycler();
+        allCategoryMore.setOnClickListener(this);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Intent intent=new Intent(context, ProductsOfTypeActivity.class);
+                intent.putExtra("check",false);
+                intent.putExtra("query",query);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+                return true;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
+
+    private void loadImageSlider() {
+        RequestQueue queue=Volley.newRequestQueue(context);
+        JsonArrayRequest jsonArrayRequest=new JsonArrayRequest(Server.urlBanner, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                for(int i=0;i<response.length();i++){
+                    try {
+
+                        listImage.add(response.getString(i));
+                        //Log.d("duy", "onResponse: "+response.getString(i));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                sliderAdapter.notifyDataSetChanged();
+                autoSliderImage();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        queue.add(jsonArrayRequest);
+    }
+
+    private void setAdapterSlider() {
+        listImage = new ArrayList();
+        sliderAdapter = new SliderAdapter(context, R.layout.item_slider_image, listImage);
+        viewPager.setAdapter(sliderAdapter);
+        circleIndicator.setViewPager(viewPager);
+        sliderAdapter.registerDataSetObserver(circleIndicator.getDataSetObserver());
     }
 
     private void addDataRecenly() {
         // adding data to model
         recentlyViewedList = new ArrayList<>();
-        RequestQueue queue= Volley.newRequestQueue(context);
-        JsonArrayRequest jsonArrayRequest=new JsonArrayRequest(Server.urlProductsRecently, new Response.Listener<JSONArray>() {
+        RequestQueue queue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Server.urlProductsRecently, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                for(int i=0;i<response.length();i++)
-                {
+                for (int i = 0; i < response.length(); i++) {
                     try {
-                        JSONObject jsonObject=response.getJSONObject(i);
+                        JSONObject jsonObject = response.getJSONObject(i);
                         recentlyViewedList.add(
                                 new ProductModel(
                                         jsonObject.getString("code"),
@@ -144,17 +191,15 @@ public class HomeFragment extends Fragment {
     }
 
     private void addDataCategory() {
-        // adding data to model
         categoryList = new ArrayList<>();
-        RequestQueue queue= Volley.newRequestQueue(context);
-        JsonArrayRequest jsonArrayRequest=new JsonArrayRequest(Server.urlTypeProduct, new Response.Listener<JSONArray>() {
+        RequestQueue queue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Server.urlTypeProduct, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                for(int i=0;i<response.length();i++)
-                {
+                for (int i = 0; i < response.length(); i++) {
                     try {
-                        JSONObject jsonObject=response.getJSONObject(i);
-                        categoryList.add(new CategoryModel(jsonObject.getString("code"),jsonObject.getString("name"),jsonObject.getString("image")));
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        categoryList.add(new CategoryModel(jsonObject.getString("code"), jsonObject.getString("name"), jsonObject.getString("image")));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -172,14 +217,13 @@ public class HomeFragment extends Fragment {
 
     private void addDataDiscounted() {
         discountedProductsList = new ArrayList<>();
-        RequestQueue queue= Volley.newRequestQueue(context);
-        JsonArrayRequest jsonArrayRequest=new JsonArrayRequest(Server.urlProductsDiscounted, new Response.Listener<JSONArray>() {
+        RequestQueue queue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Server.urlProductsDiscounted, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                for(int i=0;i<response.length();i++)
-                {
+                for (int i = 0; i < response.length(); i++) {
                     try {
-                        JSONObject jsonObject=response.getJSONObject(i);
+                        JSONObject jsonObject = response.getJSONObject(i);
                         discountedProductsList.add(
                                 new ProductModel(
                                         jsonObject.getString("code"),
@@ -209,14 +253,18 @@ public class HomeFragment extends Fragment {
     private void setControl(View view) {
         discountRecyclerView = view.findViewById(R.id.discountedRecycler);
         categoryRecyclerView = view.findViewById(R.id.categoryRecycler);
-        allCategory = view.findViewById(R.id.allCategoryImage);
+        allCategoryMore = view.findViewById(R.id.allCategoryMore);
         recentlyViewedRecycler = view.findViewById(R.id.recently_item);
         viewPager = view.findViewById(R.id.viewPager);
         circleIndicator = view.findViewById(R.id.circleindicator);
         toolbar = view.findViewById(R.id.toolbarmain);
+        searchView = view.findViewById(R.id.searchview);
+
     }
 
     private void autoSliderImage() {
+        if(listImage==null||listImage.size()==0)
+            return;
         if (timer == null)
             timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -238,32 +286,23 @@ public class HomeFragment extends Fragment {
         }, 500, 5000);
     }
 
-
-    private ArrayList<Integer> getImageSlider() {
-        ArrayList<Integer> listImage = new ArrayList<>();
-        listImage.add(R.drawable.card1);
-        listImage.add(R.drawable.card2);
-        listImage.add(R.drawable.card3);
-        return listImage;
-    }
-
     private void setDiscountedRecycler() {
-        discountedProductAdapter = new DiscountedProductAdapter(context, R.layout.item_discounted,discountedProductsList);
+        discountedProductAdapter = new DiscountedProductAdapter(context, R.layout.item_discounted, discountedProductsList);
         discountRecyclerView.setAdapter(discountedProductAdapter);
         discountRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
     }
 
 
     private void setCategoryRecycler() {
-        categoryAdapter = new CategoryAdapter(context,R.layout.item_category, categoryList);
-        categoryRecyclerView.setLayoutManager( new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        categoryAdapter = new CategoryAdapter(context, R.layout.item_category, categoryList);
+        categoryRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         categoryRecyclerView.setAdapter(categoryAdapter);
 
     }
 
     private void setRecentlyViewedRecycler() {
-        recentlyViewedRecycler.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-        recentlyViewedAdapter = new RecentlyAdapter(context, R.layout.item_recently,recentlyViewedList);
+        recentlyViewedRecycler.setLayoutManager(new GridLayoutManager(context, 2));
+        recentlyViewedAdapter = new RecentlyAdapter(context, R.layout.item_recently, recentlyViewedList);
         recentlyViewedRecycler.setAdapter(recentlyViewedAdapter);
     }
 
@@ -274,6 +313,20 @@ public class HomeFragment extends Fragment {
         if (timer != null) {
             timer.cancel();
             timer = null;
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id=view.getId();
+        switch (id)
+        {
+            case R.id.allCategoryMore:
+                Intent intent=new Intent(context,AllCategoryActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                context.startActivity(intent);
+                break;
         }
     }
 }

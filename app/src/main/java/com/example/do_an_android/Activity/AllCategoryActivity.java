@@ -13,54 +13,87 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.example.do_an_android.Adapter.AllCategoryAdapter;
-import com.example.do_an_android.Model.AllCategoryModel;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.do_an_android.Adapter.CategoryAdapter;
+import com.example.do_an_android.Model.CategoryModel;
+import com.example.do_an_android.Model.Server;
 import com.example.do_an_android.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.List;
 
 
-public class AllCategoryActivity extends AppCompatActivity {
+public class AllCategoryActivity extends AppCompatActivity  implements View.OnClickListener {
     RecyclerView AllCategoryRecycler;
-    AllCategoryAdapter allCategoryAdapter;
-    List<AllCategoryModel> allCategoryModelList;
+    CategoryAdapter categoryAdapter;
+    ArrayList<CategoryModel> allCategoryModelList;
 
-    ImageView back;
+    ImageView backAllCategory;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_category);
+        setControl();
+        setCategoryRecycler();
+        loadDataAllCategory();
+        backAllCategory.setOnClickListener(this);
+    }
 
-        AllCategoryRecycler = findViewById(R.id.all_category);
-        back = findViewById(R.id.back);
-
-
-        back.setOnClickListener(new View.OnClickListener() {
+    private void loadDataAllCategory() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Server.urlTypeProduct, new Response.Listener<JSONArray>() {
             @Override
-            public void onClick(View view) {
+            public void onResponse(JSONArray response) {
+                for (int i = 0; i < response.length(); i++) {
+                    try {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        allCategoryModelList.add(new CategoryModel(jsonObject.getString("code"), jsonObject.getString("name"), jsonObject.getString("image")));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                categoryAdapter.notifyDataSetChanged();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        queue.add(jsonArrayRequest);
+    }
+
+    private void setControl() {
+        AllCategoryRecycler = findViewById(R.id.all_category);
+        backAllCategory = findViewById(R.id.backAllTypeProduct);
+    }
+
+    private void setCategoryRecycler() {
+        allCategoryModelList=new ArrayList<>();
+        AllCategoryRecycler.setLayoutManager(new GridLayoutManager(this, 3));
+        AllCategoryRecycler.addItemDecoration(new GridSpacingItemDecoration(3, dpToPx(16), true));
+        AllCategoryRecycler.setItemAnimator(new DefaultItemAnimator());
+        categoryAdapter = new CategoryAdapter(this,R.layout.item_category,allCategoryModelList);
+        AllCategoryRecycler.setAdapter(categoryAdapter);
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id=view.getId();
+        switch (id){
+            case R.id.backAllTypeProduct:
                 Intent back = new Intent(AllCategoryActivity.this, MainActivity.class);
                 startActivity(back);
                 finish();
-            }
-        });
-
-
-        // adding data to model
-        allCategoryModelList = new ArrayList<>();
-        allCategoryModelList.add(new AllCategoryModel(1, R.drawable.ic_home_fruits));
-        allCategoryModelList.add(new AllCategoryModel(2, R.drawable.ic_home_veggies));
-        allCategoryModelList.add(new AllCategoryModel(3, R.drawable.ic_home_fish));
-        allCategoryModelList.add(new AllCategoryModel(4, R.drawable.ic_home_meats));
-        setCategoryRecycler(allCategoryModelList);
-    }
-    private void setCategoryRecycler(List<AllCategoryModel> allcategoryModelList) {
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 4);
-        AllCategoryRecycler.setLayoutManager(layoutManager);
-        AllCategoryRecycler.addItemDecoration(new GridSpacingItemDecoration(4, dpToPx(16), true));
-        AllCategoryRecycler.setItemAnimator(new DefaultItemAnimator());
-        allCategoryAdapter = new AllCategoryAdapter(this,allcategoryModelList);
-        AllCategoryRecycler.setAdapter(allCategoryAdapter);
+                break;
+        }
     }
 
     // now we need some item decoration class for manage spacing
