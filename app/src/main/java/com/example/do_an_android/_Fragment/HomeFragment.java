@@ -2,6 +2,7 @@ package com.example.do_an_android._Fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -70,7 +72,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     Timer timer;
     Toolbar toolbar;
     SearchView searchView;
-
+SharedPreferences sharedPreferencesUser;
     public HomeFragment(Context context) {
         this.context = context;
     }
@@ -84,6 +86,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        sharedPreferencesUser=context.getSharedPreferences("user",Context.MODE_PRIVATE);
+        Toast.makeText(context,sharedPreferencesUser.getString("username","khùng"),Toast.LENGTH_LONG).show();
         setControl(view);
         addDataDiscounted();
         addDataCategory();
@@ -168,9 +172,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                                 new ProductModel(
                                         jsonObject.getString("code"),
                                         jsonObject.getString("name"),
-                                        jsonObject.getDouble("price"),
+                                        jsonObject.getLong("price"),
                                         jsonObject.getInt("quantity"),
-                                        jsonObject.getDouble("price_discounted"),
+                                        jsonObject.getLong("price_discounted"),
                                         jsonObject.getString("description"),
                                         jsonObject.getString("image"),
                                         jsonObject.getString("date_update"),
@@ -228,9 +232,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                                 new ProductModel(
                                         jsonObject.getString("code"),
                                         jsonObject.getString("name"),
-                                        jsonObject.getDouble("price"),
+                                        jsonObject.getLong("price"),
                                         jsonObject.getInt("quantity"),
-                                        jsonObject.getDouble("price_discounted"),
+                                        jsonObject.getLong("price_discounted"),
                                         jsonObject.getString("description"),
                                         jsonObject.getString("image"),
                                         jsonObject.getString("date_update"),

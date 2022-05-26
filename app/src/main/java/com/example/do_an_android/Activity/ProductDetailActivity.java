@@ -9,9 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.do_an_android.Model.ProductModel;
 import com.example.do_an_android.Model.Server;
+import com.example.do_an_android.Model.Support;
 import com.example.do_an_android.R;
 import com.squareup.picasso.Picasso;
 
@@ -30,15 +32,13 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         loadData();
         back.setOnClickListener(this);
     }
-
     private void loadData() {
         ProductModel productModel= (ProductModel) getIntent().getSerializableExtra("productDetail");
         Picasso.get().load(Server.urlImage+productModel.getImage()).into(imageProductDetail);
         nameProductDetail.setText(productModel.getName());
-        priceProductDetail.setText(productModel.getPrice()+"");
-        priceDiscountProductDetail.setText(productModel.getPrice_discounted()+"");
+        priceProductDetail.setText(Support.ConvertMoney(productModel.getPrice()));
+        priceDiscountProductDetail.setText(Support.ConvertMoney(productModel.getPrice_discounted()));
         descriptionProdcutDetail.setText(productModel.getDescription());
-
     }
 
     private void setControl() {

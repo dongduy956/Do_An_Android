@@ -4,12 +4,12 @@ import java.io.Serializable;
 
 public class ProductModel implements Serializable {
    private String code,name;
-   private double price;
+   private long price;
    private int quantity;
-   private double price_discounted;
+   private long price_discounted;
    private String description,image,date_update,type_code;
 
-    public ProductModel(String code, String name, double price, int quantity, double price_discounted, String description, String image, String date_update, String type_code) {
+    public ProductModel(String code, String name, long price, int quantity, long price_discounted, String description, String image, String date_update, String type_code) {
         this.code = code;
         this.name = name;
         this.price = price;
@@ -37,11 +37,11 @@ public class ProductModel implements Serializable {
         this.name = name;
     }
 
-    public double getPrice() {
+    public long getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(long price) {
         this.price = price;
     }
 
@@ -53,11 +53,11 @@ public class ProductModel implements Serializable {
         this.quantity = quantity;
     }
 
-    public double getPrice_discounted() {
+    public long getPrice_discounted() {
         return price_discounted;
     }
 
-    public void setPrice_discounted(double price_discounted) {
+    public void setPrice_discounted(long price_discounted) {
         this.price_discounted = price_discounted;
     }
 

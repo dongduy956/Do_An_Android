@@ -103,6 +103,16 @@ public class SignupTabFragment extends Fragment implements View.OnClickListener 
         }
     }
 
+    private void _Clear() {
+        username_sigup.setText("");
+        password_signup.setText("");
+        name_signup.setText("");
+        address_signup.setText("");
+        phone_signup.setText("");
+        password_confirm_signup.setText("");
+        username_sigup.requestFocus();
+    }
+
     private void Sigup() {
 
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -116,7 +126,11 @@ public class SignupTabFragment extends Fragment implements View.OnClickListener 
                 else if (response.toString().equals("-1"))
                     Toast.makeText(context, "Có lỗi xảy ra.", Toast.LENGTH_SHORT).show();
                 else
+                {
+                    _Clear();
                     Toast.makeText(context, "Đăng kí thành công.", Toast.LENGTH_SHORT).show();
+
+                }
             }
         }, new Response.ErrorListener() {
             @Override

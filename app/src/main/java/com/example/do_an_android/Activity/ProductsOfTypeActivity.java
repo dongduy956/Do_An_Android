@@ -79,9 +79,9 @@ public class ProductsOfTypeActivity extends AppCompatActivity implements View.On
                                 new ProductModel(
                                         jsonObject.getString("code"),
                                         jsonObject.getString("name"),
-                                        jsonObject.getDouble("price"),
+                                        jsonObject.getLong("price"),
                                         jsonObject.getInt("quantity"),
-                                        jsonObject.getDouble("price_discounted"),
+                                        jsonObject.getLong("price_discounted"),
                                         jsonObject.getString("description"),
                                         jsonObject.getString("image"),
                                         jsonObject.getString("date_update"),

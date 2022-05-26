@@ -10,7 +10,7 @@
         tools:context="._Fragment.LoginTabFragment">
 
         <EditText
-            android:id="@+id/username"
+            android:id="@+id/username_login"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text_bg"
@@ -26,7 +26,7 @@
             app:layout_constraintVertical_bias="0" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/password_login"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -39,21 +39,21 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/username"
+            app:layout_constraintTop_toBottomOf="@+id/username_login"
             app:layout_constraintVertical_bias="0" />
 
-        <TextView
-            android:id="@+id/textView"
+        <CheckBox
+            android:id="@+id/ckbRemember"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Quên mật khẩu?"
+            android:text="Nhớ mật khẩu"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText"
+            app:layout_constraintTop_toBottomOf="@+id/password_login"
             app:layout_constraintVertical_bias="0" />
 
         <Button
@@ -70,7 +70,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintTop_toBottomOf="@+id/ckbRemember"
             app:layout_constraintVertical_bias="0" />
 
 

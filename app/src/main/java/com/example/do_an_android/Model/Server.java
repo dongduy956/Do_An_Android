@@ -10,4 +10,5 @@ public class Server {
     public static String urlBanner=urlBase+"getBanners.php";
     public static String urlSearch=urlBase+"search.php";
     public static String urlSignup=urlBase+"signup.php";
+    public static String urlLogin=urlBase+"login.php";
 }
