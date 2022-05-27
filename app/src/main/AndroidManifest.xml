@@ -13,6 +13,9 @@
         android:theme="@style/Theme.Do_An_Android"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Activity.PayOrderActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.ProductsOfTypeActivity"
             android:exported="false" />
         <activity

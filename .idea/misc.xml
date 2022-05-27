@@ -10,6 +10,7 @@
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/activity_all_category.xml" value="0.12" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/activity_login_tab_fragment.xml" value="0.1" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/activity_main.xml" value="0.10277777777777777" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/activity_pay_order.xml" value="0.1796875" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/activity_product_detail.xml" value="0.14666666666666667" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/activity_products_of_type.xml" value="0.1" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/discounted_item.xml" value="0.1796875" />
@@ -17,6 +18,7 @@
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/fragment_home.xml" value="0.14666666666666667" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/fragment_login_signup.xml" value="0.1" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/fragment_login_tab.xml" value="0.22" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/fragment_order_of_customer.xml" value="0.1796875" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/fragment_signup_tab.xml" value="0.22" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/item_all_category.xml" value="0.1796875" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/item_cart.xml" value="0.1796875" />

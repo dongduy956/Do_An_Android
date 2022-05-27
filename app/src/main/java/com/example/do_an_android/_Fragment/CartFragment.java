@@ -1,6 +1,8 @@
 package com.example.do_an_android._Fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.do_an_android.Activity.MainActivity;
+import com.example.do_an_android.Activity.PayOrderActivity;
 import com.example.do_an_android.Activity.ProductDetailActivity;
 import com.example.do_an_android.Adapter.CartAdapter;
 import com.example.do_an_android.Model.CartModel;
@@ -34,13 +37,12 @@ import java.util.Arrays;
 
 public class CartFragment extends Fragment implements View.OnClickListener {
     Context context;
-    ArrayList<CartModel> lstCart = null;
+    static ArrayList<CartModel> lstCart = null;
     RecyclerView recyclerView;
-    SharedPreferences sharedPreferencesCart;
-    TextView txttotalquantity_cart, txttotalpay_cart;
+    static TextView txttotalquantity_cart, txttotalpay_cart;
     ImageView backCart;
     Button btnPay;
-    SharedPreferences sharedPreferencesUser;
+    static SharedPreferences sharedPreferencesUser, sharedPreferencesCart;
 
 
     public CartFragment(Context context) {
@@ -71,7 +73,9 @@ public class CartFragment extends Fragment implements View.OnClickListener {
         setData();
         backCart.setOnClickListener(this);
         btnPay.setOnClickListener(this);
+
     }
+
 
     private void setData() {
         int sumQuantity = 0;
@@ -83,10 +87,26 @@ public class CartFragment extends Fragment implements View.OnClickListener {
         txttotalquantity_cart.setText(sumQuantity + "");
         txttotalpay_cart.setText(Support.ConvertMoney(total));
 
-        CartAdapter cartAdapter = new CartAdapter(context, R.layout.item_cart, lstCart);
+        CartAdapter cartAdapter = new CartAdapter(getContext(), R.layout.item_cart, lstCart);
         recyclerView.setAdapter(cartAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
 
+    }
+
+    public static void updateCart(ArrayList<CartModel> cartList) {
+        lstCart = cartList;
+        int sum = 0;
+        int total = 0;
+        for (CartModel item : lstCart) {
+            sum += item.getQuantity();
+            total += item.getQuantity() * item.getProductModel().getPrice();
+        }
+        txttotalquantity_cart.setText(sum + "");
+
+        txttotalpay_cart.setText(Support.ConvertMoney(total));
+        SharedPreferences.Editor editorCart = sharedPreferencesCart.edit();
+        editorCart.putString("item_cart", new Gson().toJson(lstCart));
+        editorCart.commit();
     }
 
     private void setControl(View view) {
@@ -117,8 +137,10 @@ public class CartFragment extends Fragment implements View.OnClickListener {
                         Intent intent = new Intent(context, MainActivity.class);
                         intent.putExtra("checkPayCart", true);
                         startActivity(intent);
-                    } else
-                        Toast.makeText(context, username, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent intent = new Intent(context, PayOrderActivity.class);
+                        startActivity(intent);
+                    }
                 }
                 break;
         }

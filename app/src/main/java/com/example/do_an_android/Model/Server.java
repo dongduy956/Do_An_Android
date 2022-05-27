@@ -1,7 +1,7 @@
 package com.example.do_an_android.Model;
 
 public class Server {
-    private static String urlBase="http://192.168.43.66:8089/service/";
+    private static String urlBase="http://192.168.0.106:8089/service/";
     public static String urlImage=urlBase+"hinhanh/";
     public static String urlTypeProduct=urlBase+"getTypeProducts.php";
     public static String urlProductsDiscounted=urlBase+"getProductsDiscounted.php";
@@ -11,4 +11,8 @@ public class Server {
     public static String urlSearch=urlBase+"search.php";
     public static String urlSignup=urlBase+"signup.php";
     public static String urlLogin=urlBase+"login.php";
+    public static String urlGetCustomerByUsername=urlBase+"getCustomerByUsername.php";
+    public static String urlInsertOrder=urlBase+"insertOrder.php";
+    public static String urlInsertOrderDetail=urlBase+"insertOrderDetail.php";
+    public static String urlUpdateOrder=urlBase+"updateOrder.php";
 }

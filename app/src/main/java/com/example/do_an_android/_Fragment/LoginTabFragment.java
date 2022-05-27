@@ -73,7 +73,6 @@ public class LoginTabFragment extends Fragment implements View.OnClickListener {
 
     private void checkRemember() {
         sharedPreferencesRemember=context.getSharedPreferences("login", Context.MODE_PRIVATE);
-
         //load thông tin đã lưu lên textbox
         boolean isRemember =sharedPreferencesRemember.getBoolean("isRemember",false);
         if(isRemember)

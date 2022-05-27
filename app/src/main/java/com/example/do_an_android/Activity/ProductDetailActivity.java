@@ -92,24 +92,28 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 AddCart();
                 break;
             case R.id.btnBuyNow:
-                AddCart();
-                Intent intent=new Intent(ProductDetailActivity.this,MainActivity.class);
-                intent.putExtra("checkBuyNow",true);
-                startActivity(intent);
+                if(Integer.parseInt(quantityProductDetail.getText().toString())!=0) {
+                    AddCart();
+                    Intent intent = new Intent(ProductDetailActivity.this, MainActivity.class);
+                    intent.putExtra("checkBuyNow", true);
+                    startActivity(intent);
+                }
                 break;
         }
     }
 
     private void AddCart() {
-        SharedPreferences.Editor editorCart = sharedPreferencesCart.edit();
         boolean check=false;
+        int quantity= Integer.parseInt(quantityProductDetail.getText().toString());
+        if(quantity==0)
+            return;
         for(CartModel item : listCart)
         {
             if(item.getProductModel().getCode().equals(productModel.getCode())) {
                 CartModel cartModel=item;
                 listCart.remove(item);
 
-                cartModel.setQuantity(cartModel.getQuantity()+Integer.parseInt(quantityProductDetail.getText().toString()));
+                cartModel.setQuantity(cartModel.getQuantity()+quantity);
                 check=true;
                 listCart.add(cartModel);
 
@@ -119,6 +123,8 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         if(!check)
             listCart.add(new CartModel(productModel,Integer.parseInt(quantityProductDetail.getText().toString())));
         Toast.makeText(this,"Thêm sản phẩm thành công.",Toast.LENGTH_SHORT).show();
+        SharedPreferences.Editor editorCart = sharedPreferencesCart.edit();
+
         editorCart.putString("item_cart",new Gson().toJson(listCart));
         editorCart.commit();
     }

@@ -26,12 +26,13 @@
 
     <EditText
         android:id="@+id/quantity_detail_cart"
-        android:layout_width="50dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_below="@id/name_detail_cart"
+        android:layout_marginTop="10dp"
         android:layout_toRightOf="@id/image_detail_cart"
-        android:inputType="number" />
+        android:inputType="number"
+        />
 
     <TextView
         android:id="@+id/price_deatail_cart"
