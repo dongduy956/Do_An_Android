@@ -1,9 +1,14 @@
 package com.example.do_an_android.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,11 +16,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.do_an_android.Model.CartModel;
 import com.example.do_an_android.Model.ProductModel;
 import com.example.do_an_android.Model.Server;
 import com.example.do_an_android.Model.Support;
 import com.example.do_an_android.R;
+import com.example.do_an_android._Fragment.CartFragment;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class ProductDetailActivity extends AppCompatActivity implements View.OnClickListener {
@@ -23,6 +34,9 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
     TextView nameProductDetail, priceProductDetail, priceDiscountProductDetail, descriptionProdcutDetail;
     EditText quantityProductDetail;
     Button btnBuyNow, btnAddCart;
+    ProductModel productModel;
+    SharedPreferences sharedPreferencesCart;
+    ArrayList<CartModel> listCart = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +45,22 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         setControl();
         loadData();
         back.setOnClickListener(this);
+        btnAddCart.setOnClickListener(this);
+        btnBuyNow.setOnClickListener(this);
+        sharedPreferencesCart = getSharedPreferences("cart", Context.MODE_PRIVATE);
+        String cart = sharedPreferencesCart.getString("item_cart", "");
+
+        CartModel[] cartModels = new Gson().fromJson(cart, CartModel[].class);
+        if (cartModels != null)
+            listCart = new ArrayList<CartModel>(Arrays.asList(cartModels));
+        else
+            listCart = new ArrayList<>();
+
     }
+
     private void loadData() {
-        ProductModel productModel= (ProductModel) getIntent().getSerializableExtra("productDetail");
-        Picasso.get().load(Server.urlImage+productModel.getImage()).into(imageProductDetail);
+        productModel = (ProductModel) getIntent().getSerializableExtra("productDetail");
+        Picasso.get().load(Server.urlImage + productModel.getImage()).into(imageProductDetail);
         nameProductDetail.setText(productModel.getName());
         priceProductDetail.setText(Support.ConvertMoney(productModel.getPrice()));
         priceDiscountProductDetail.setText(Support.ConvertMoney(productModel.getPrice_discounted()));
@@ -62,10 +88,38 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 startActivity(i);
                 finish();
                 break;
-            case  R.id.btnAddCart:
+            case R.id.btnAddCart:
+                AddCart();
                 break;
-            case  R.id.btnBuyNow:
+            case R.id.btnBuyNow:
+                AddCart();
+                Intent intent=new Intent(ProductDetailActivity.this,MainActivity.class);
+                intent.putExtra("checkBuyNow",true);
+                startActivity(intent);
                 break;
         }
+    }
+
+    private void AddCart() {
+        SharedPreferences.Editor editorCart = sharedPreferencesCart.edit();
+        boolean check=false;
+        for(CartModel item : listCart)
+        {
+            if(item.getProductModel().getCode().equals(productModel.getCode())) {
+                CartModel cartModel=item;
+                listCart.remove(item);
+
+                cartModel.setQuantity(cartModel.getQuantity()+Integer.parseInt(quantityProductDetail.getText().toString()));
+                check=true;
+                listCart.add(cartModel);
+
+                break;
+            }
+        }
+        if(!check)
+            listCart.add(new CartModel(productModel,Integer.parseInt(quantityProductDetail.getText().toString())));
+        Toast.makeText(this,"Thêm sản phẩm thành công.",Toast.LENGTH_SHORT).show();
+        editorCart.putString("item_cart",new Gson().toJson(listCart));
+        editorCart.commit();
     }
 }

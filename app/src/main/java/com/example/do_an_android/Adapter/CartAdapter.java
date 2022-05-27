@@ -12,7 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.do_an_android.Model.CartModel;
+import com.example.do_an_android.Model.Server;
+import com.example.do_an_android.Model.Support;
 import com.example.do_an_android.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -36,11 +39,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
         CartModel cart = lstCart.get(position);
-        holder.image.setImageResource(cart.getImage());
-        holder.quantity.setText(cart.getQuantity());
-        holder.subtotal.setText(cart.getSubtoal());
-        holder.price.setText(cart.getPrice());
-        holder.name.setText(cart.getName());
+        Picasso.get().load(Server.urlImage+cart.getProductModel().getImage()).into(holder.image);
+       holder.quantity.setText(cart.getQuantity()+"");
+        holder.subtotal.setText(Support.ConvertMoney(cart.getQuantity()*cart.getProductModel().getPrice()));
+        holder.price.setText(Support.ConvertMoney(cart.getProductModel().getPrice()));
+        holder.name.setText(cart.getProductModel().getName());
     }
 
     @Override

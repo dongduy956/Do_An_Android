@@ -72,7 +72,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     Timer timer;
     Toolbar toolbar;
     SearchView searchView;
-SharedPreferences sharedPreferencesUser;
+    SharedPreferences sharedPreferencesUser;
+
     public HomeFragment(Context context) {
         this.context = context;
     }
@@ -86,8 +87,8 @@ SharedPreferences sharedPreferencesUser;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        sharedPreferencesUser=context.getSharedPreferences("user",Context.MODE_PRIVATE);
-        Toast.makeText(context,sharedPreferencesUser.getString("username","khùng"),Toast.LENGTH_LONG).show();
+        sharedPreferencesUser = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+        Toast.makeText(context, sharedPreferencesUser.getString("username", "khùng"), Toast.LENGTH_LONG).show();
         setControl(view);
         addDataDiscounted();
         addDataCategory();
@@ -108,9 +109,9 @@ SharedPreferences sharedPreferencesUser;
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Intent intent=new Intent(context, ProductsOfTypeActivity.class);
-                intent.putExtra("check",false);
-                intent.putExtra("query",query);
+                Intent intent = new Intent(context, ProductsOfTypeActivity.class);
+                intent.putExtra("check", false);
+                intent.putExtra("query", query);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
                 return true;
@@ -124,11 +125,11 @@ SharedPreferences sharedPreferencesUser;
     }
 
     private void loadImageSlider() {
-        RequestQueue queue=Volley.newRequestQueue(context);
-        JsonArrayRequest jsonArrayRequest=new JsonArrayRequest(Server.urlBanner, new Response.Listener<JSONArray>() {
+        RequestQueue queue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Server.urlBanner, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                for(int i=0;i<response.length();i++){
+                for (int i = 0; i < response.length(); i++) {
                     try {
 
                         listImage.add(response.getString(i));
@@ -267,7 +268,7 @@ SharedPreferences sharedPreferencesUser;
     }
 
     private void autoSliderImage() {
-        if(listImage==null||listImage.size()==0)
+        if (listImage == null || listImage.size() == 0)
             return;
         if (timer == null)
             timer = new Timer();
@@ -322,11 +323,10 @@ SharedPreferences sharedPreferencesUser;
 
     @Override
     public void onClick(View view) {
-        int id=view.getId();
-        switch (id)
-        {
+        int id = view.getId();
+        switch (id) {
             case R.id.allCategoryMore:
-                Intent intent=new Intent(context,AllCategoryActivity.class);
+                Intent intent = new Intent(context, AllCategoryActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 context.startActivity(intent);

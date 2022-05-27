@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -20,15 +21,28 @@ import com.google.android.material.navigation.NavigationBarView;
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     Fragment fm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setControl();
-        fm = new HomeFragment(this);
-        loadFragment(fm);
+        boolean checkBuyNow = getIntent().getBooleanExtra("checkBuyNow", false);
         setOnClickBottomView();
+        if (checkBuyNow)
+            fm = new CartFragment(this);
+        else {
+            boolean checkPayCart = getIntent().getBooleanExtra("checkPayCart", false);
+            if (checkPayCart)
+                fm = new LoginSignupFragment(this);
+            else
+                fm = new HomeFragment(this);
+        }
+
+        loadFragment(fm);
+
     }
+
     private void setOnClickBottomView() {
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -39,13 +53,13 @@ public class MainActivity extends AppCompatActivity {
                         fm = new HomeFragment(getApplicationContext());
                         break;
                     case R.id.mn_cart:
-                        fm=new CartFragment(getApplicationContext());
+                        fm = new CartFragment(getApplicationContext());
                         break;
                     case R.id.mn_account:
-                        fm=new LoginSignupFragment(getApplicationContext());
+                        fm = new LoginSignupFragment(getApplicationContext());
                         break;
                     default:
-                        fm = new HomeFragment(getApplicationContext());
+                        fm = new CartFragment(getApplicationContext());
                 }
                 loadFragment(fm);
                 return true;
@@ -53,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void loadFragment(Fragment fragment) {
+    public void loadFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.framehost, fragment);
         fragmentTransaction.commit();
