@@ -1,6 +1,7 @@
 package com.example.do_an_android._Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -23,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.do_an_android.Activity.MainActivity;
 import com.example.do_an_android.Model.Server;
 import com.example.do_an_android.Model.Support;
 import com.example.do_an_android.R;
@@ -122,7 +124,7 @@ public class LoginTabFragment extends Fragment implements View.OnClickListener {
                     }
                     editorRemember.putBoolean("isRemember",ckbRemember.isChecked());
                     editorRemember.commit();
-                    Toast.makeText(context, "Đăng nhập thành công.", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(context,MainActivity.class));
                 }
             }
         }, new Response.ErrorListener() {

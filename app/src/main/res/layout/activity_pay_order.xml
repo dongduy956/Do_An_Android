@@ -29,6 +29,7 @@
             app:layout_constraintVertical_bias="0"
             />
         <EditText
+            android:enabled="false"
             android:id="@+id/name_order"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -46,6 +47,8 @@
             app:layout_constraintVertical_bias="0" />
 
         <EditText
+            android:enabled="false"
+
             android:id="@+id/address_order"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -63,6 +66,8 @@
             app:layout_constraintVertical_bias="0" />
 
         <EditText
+            android:enabled="false"
+
             android:id="@+id/phone_order"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

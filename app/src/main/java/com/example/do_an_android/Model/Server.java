@@ -15,4 +15,8 @@ public class Server {
     public static String urlInsertOrder=urlBase+"insertOrder.php";
     public static String urlInsertOrderDetail=urlBase+"insertOrderDetail.php";
     public static String urlUpdateOrder=urlBase+"updateOrder.php";
+    public static String urlUpdateCustomer=urlBase+"updateCustomer.php";
+    public static String urlChangePassCustomer=urlBase+"changePassCustomer.php";
+    public static String urlGetListOrderDetailByCode=urlBase+"getListOrderDetailByCode.php";
+    public static String urlGetListOrderOfCustomer=urlBase+"getListOrderOfCustomer.php";
 }

@@ -84,7 +84,7 @@ public class PayOrderActivity extends AppCompatActivity {
                 try {
                     name_order.setText(response.getString("name"));
                     address_order.setText(response.getString("address"));
-                    phone_order.setText(response.getString("phone"));
+                    phone_order.setText(0+response.getString("phone"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
