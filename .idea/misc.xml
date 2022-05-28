@@ -13,7 +13,7 @@
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/activity_login_tab_fragment.xml" value="0.1" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/activity_main.xml" value="0.10277777777777777" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/activity_pay_order.xml" value="0.1796875" />
-        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/activity_product_detail.xml" value="0.14666666666666667" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/activity_product_detail.xml" value="0.22" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/activity_products_of_type.xml" value="0.1" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/diaglog_change_pass.xml" value="0.1796875" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/dialog_order_detail.xml" value="0.14666666666666667" />
@@ -27,8 +27,8 @@
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/fragment_update_customer.xml" value="0.1796875" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/item_all_category.xml" value="0.1796875" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/item_cart.xml" value="0.1796875" />
-        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/item_category.xml" value="0.1796875" />
-        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/item_discounted.xml" value="0.1" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/item_category.xml" value="0.4466666666666667" />
+        <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/item_discounted.xml" value="0.3333333333333333" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/item_order_detail.xml" value="0.1796875" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/item_order_of_customer.xml" value="0.1796875" />
         <entry key="..\:/android/Do_An_Android/app/src/main/res/layout/item_product_of_type.xml" value="0.1" />

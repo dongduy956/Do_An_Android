@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.do_an_android.Activity.ProductDetailActivity;
 import com.example.do_an_android.Model.ProductModel;
 import com.example.do_an_android.Model.Server;
+import com.example.do_an_android.Model.Support;
 import com.example.do_an_android.R;
 import com.squareup.picasso.Picasso;
 
@@ -44,6 +45,7 @@ ArrayList<ProductModel> arrayList;
         ProductModel productModel=arrayList.get(position);
         Picasso.get().load(Server.urlImage+productModel.getImage()).into(holder.imageProductOfType);
         holder.nameProductOfType.setText(productModel.getName());
+        holder.priceProductOfType.setText(Support.ConvertMoney(productModel.getPrice()));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,13 +66,13 @@ ArrayList<ProductModel> arrayList;
     public static class ViewProductOfType extends RecyclerView.ViewHolder{
 
         ImageView imageProductOfType;
-        TextView nameProductOfType;
+        TextView nameProductOfType,priceProductOfType;
 
         public ViewProductOfType(@NonNull View itemView) {
             super(itemView);
             imageProductOfType = itemView.findViewById(R.id.imageProductOfType);
             nameProductOfType = itemView.findViewById(R.id.nameProductOfType);
-
+            priceProductOfType=itemView.findViewById(R.id.priceProductOfType);
         }
     }
 }

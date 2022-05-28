@@ -44,6 +44,7 @@ public class PayOrderActivity extends AppCompatActivity {
     SharedPreferences sharedPreferencesCart, sharedPreferencesUser;
     ArrayList<CartModel> lstCart;
     String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,14 +57,16 @@ public class PayOrderActivity extends AppCompatActivity {
     }
 
     private void setDataCart() {
-        int sum=0;
-        long total=0;
-        for(CartModel cartModel: lstCart)
-        {
-            sum+=cartModel.getQuantity();
-            total+=cartModel.getQuantity()*cartModel.getProductModel().getPrice();
+        int sum = 0;
+        long total = 0;
+        for (CartModel cartModel : lstCart) {
+            sum += cartModel.getQuantity();
+            if (cartModel.getProductModel().getPrice_discounted() > 0)
+                total += cartModel.getQuantity() * cartModel.getProductModel().getPrice_discounted();
+            else
+                total += cartModel.getQuantity() * cartModel.getProductModel().getPrice();
         }
-        sumProductConfirm.setText(sum+"");
+        sumProductConfirm.setText(sum + "");
         totalConfirm.setText(Support.ConvertMoney(total));
     }
 
@@ -76,7 +79,7 @@ public class PayOrderActivity extends AppCompatActivity {
 
     private void getDataCustomer() {
         sharedPreferencesUser = getSharedPreferences("user", Context.MODE_PRIVATE);
-     username = sharedPreferencesUser.getString("username", "");
+        username = sharedPreferencesUser.getString("username", "");
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Server.urlGetCustomerByUsername + "?username=" + username, null, new Response.Listener<JSONObject>() {
             @Override
@@ -84,7 +87,7 @@ public class PayOrderActivity extends AppCompatActivity {
                 try {
                     name_order.setText(response.getString("name"));
                     address_order.setText(response.getString("address"));
-                    phone_order.setText(0+response.getString("phone"));
+                    phone_order.setText(0 + response.getString("phone"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -102,14 +105,14 @@ public class PayOrderActivity extends AppCompatActivity {
         btnConfirmOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               insertOrder();
+                insertOrder();
             }
         });
     }
 
     private void updateOrder(String code_order) {
 
-        StringRequest stringRequest=new StringRequest(Request.Method.POST,Server.urlUpdateOrder, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Server.urlUpdateOrder, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
@@ -119,16 +122,19 @@ public class PayOrderActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
 
             }
-        }){
+        }) {
             @Nullable
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> params=new HashMap<>();
-                long total=0;
-                for(CartModel cartModel : lstCart)
-                    total+=cartModel.getQuantity()*cartModel.getProductModel().getPrice();
-                params.put("total",total+"");
-                params.put("code_order",code_order);
+                Map<String, String> params = new HashMap<>();
+                long total = 0;
+                for (CartModel cartModel : lstCart)
+                    if (cartModel.getProductModel().getPrice_discounted() > 0)
+                        total += cartModel.getQuantity() * cartModel.getProductModel().getPrice_discounted();
+                    else
+                        total += cartModel.getQuantity() * cartModel.getProductModel().getPrice();
+                params.put("total", total + "");
+                params.put("code_order", code_order);
                 return params;
             }
         };
@@ -136,36 +142,35 @@ public class PayOrderActivity extends AppCompatActivity {
     }
 
     private void OrderDetail(String code_order) {
-        Log.d("duy", "OrderDetail: "+code_order);
-            for(CartModel cartModel : lstCart) {
-                insertOrderDetail(code_order, cartModel);
-                Log.d("duy", "OrderDetail: "+cartModel.getProductModel().getCode());
-                Log.d("duy", "OrderDetail: "+cartModel.getProductModel().getPrice());
-                Log.d("duy", "OrderDetail: "+cartModel.getQuantity());
-            }
+        for (CartModel cartModel : lstCart) {
+            insertOrderDetail(code_order, cartModel);
+        }
     }
 
     private void insertOrderDetail(String code_order, CartModel cartModel) {
-        StringRequest stringRequest=new StringRequest(Request.Method.POST, Server.urlInsertOrderDetail, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Server.urlInsertOrderDetail, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("duy", "onResponse: "+response.toString());
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("duy", "onErrorResponse: "+error.getMessage());
             }
-        }){
+        }) {
             @Nullable
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> params=new HashMap<>();
-                params.put("code_order",code_order);
-                params.put("code_product",cartModel.getProductModel().getCode());
-                params.put("price",cartModel.getProductModel().getPrice()+"");
-                params.put("quantity",cartModel.getQuantity()+"");
-                params.put("total",cartModel.getProductModel().getPrice()*cartModel.getQuantity()+"");
+                Map<String, String> params = new HashMap<>();
+                long price=0;
+                if(cartModel.getProductModel().getPrice_discounted()>0)
+                    price=cartModel.getProductModel().getPrice_discounted();
+                else
+                    price=cartModel.getProductModel().getPrice();
+                params.put("code_order", code_order);
+                params.put("code_product", cartModel.getProductModel().getCode());
+                params.put("price", price + "");
+                params.put("quantity", cartModel.getQuantity() + "");
+                params.put("total", price * cartModel.getQuantity() + "");
                 return params;
             }
         };
@@ -174,21 +179,19 @@ public class PayOrderActivity extends AppCompatActivity {
 
     private void insertOrder() {
 
-        StringRequest stringRequest=new StringRequest(Request.Method.POST,Server.urlInsertOrder, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Server.urlInsertOrder, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                String code_order=response.toString();
-                  if(!code_order.equals("0"))
-                  {
-                      OrderDetail(code_order);
-                      updateOrder(code_order);
-                      Toast.makeText(getApplicationContext(), "Đặt hàng thành công.", Toast.LENGTH_SHORT).show();
-                      getSharedPreferences("cart", Context.MODE_PRIVATE)
-                              .edit().clear().commit();
-                      startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                  }
-                  else
-                      Toast.makeText(getApplicationContext(), "Đặt hàng thất bại.", Toast.LENGTH_SHORT).show();
+                String code_order = response.toString();
+                if (!code_order.equals("0")) {
+                    OrderDetail(code_order);
+                    updateOrder(code_order);
+                    Toast.makeText(getApplicationContext(), "Đặt hàng thành công.", Toast.LENGTH_SHORT).show();
+                    getSharedPreferences("cart", Context.MODE_PRIVATE)
+                            .edit().clear().commit();
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                } else
+                    Toast.makeText(getApplicationContext(), "Đặt hàng thất bại.", Toast.LENGTH_SHORT).show();
 
             }
         }, new Response.ErrorListener() {
@@ -196,12 +199,12 @@ public class PayOrderActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
 
             }
-        }){
+        }) {
             @Nullable
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> params=new HashMap<>();
-                params.put("username",username);
+                Map<String, String> params = new HashMap<>();
+                params.put("username", username);
                 return params;
             }
         };

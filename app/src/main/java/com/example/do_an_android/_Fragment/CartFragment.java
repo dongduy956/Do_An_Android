@@ -44,7 +44,6 @@ public class CartFragment extends Fragment implements View.OnClickListener {
     Button btnPay;
     static SharedPreferences sharedPreferencesUser, sharedPreferencesCart;
 
-
     public CartFragment(Context context) {
         this.context = context;
 
@@ -64,10 +63,9 @@ public class CartFragment extends Fragment implements View.OnClickListener {
         String cart = sharedPreferencesCart.getString("item_cart", "");
 
         CartModel[] cartModels = new Gson().fromJson(cart, CartModel[].class);
-        if (cartModels != null) {
+        if (cartModels != null)
             lstCart = new ArrayList<CartModel>(Arrays.asList(cartModels));
-
-        } else
+        else
             lstCart = new ArrayList<>();
         setControl(view);
         setData();
@@ -82,7 +80,10 @@ public class CartFragment extends Fragment implements View.OnClickListener {
         long total = 0;
         for (CartModel itemCart : lstCart) {
             sumQuantity += itemCart.getQuantity();
-            total += itemCart.getQuantity() * itemCart.getProductModel().getPrice();
+            if (itemCart.getProductModel().getPrice_discounted() > 0)
+                total += itemCart.getQuantity() * itemCart.getProductModel().getPrice_discounted();
+            else
+                total += itemCart.getQuantity() * itemCart.getProductModel().getPrice();
         }
         txttotalquantity_cart.setText(sumQuantity + "");
         txttotalpay_cart.setText(Support.ConvertMoney(total));
@@ -99,7 +100,10 @@ public class CartFragment extends Fragment implements View.OnClickListener {
         int total = 0;
         for (CartModel item : lstCart) {
             sum += item.getQuantity();
-            total += item.getQuantity() * item.getProductModel().getPrice();
+            if (item.getProductModel().getPrice_discounted() > 0)
+                total += item.getQuantity() * item.getProductModel().getPrice_discounted();
+            else
+                total += item.getQuantity() * item.getProductModel().getPrice();
         }
         txttotalquantity_cart.setText(sum + "");
 

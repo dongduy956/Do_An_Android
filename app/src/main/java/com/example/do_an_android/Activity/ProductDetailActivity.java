@@ -7,6 +7,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,7 +29,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
 public class ProductDetailActivity extends AppCompatActivity implements View.OnClickListener {
     ImageView back, imageProductDetail;
     TextView nameProductDetail, priceProductDetail, priceDiscountProductDetail, descriptionProdcutDetail;
@@ -49,7 +49,6 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         btnBuyNow.setOnClickListener(this);
         sharedPreferencesCart = getSharedPreferences("cart", Context.MODE_PRIVATE);
         String cart = sharedPreferencesCart.getString("item_cart", "");
-
         CartModel[] cartModels = new Gson().fromJson(cart, CartModel[].class);
         if (cartModels != null)
             listCart = new ArrayList<CartModel>(Arrays.asList(cartModels));
@@ -62,9 +61,14 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         productModel = (ProductModel) getIntent().getSerializableExtra("productDetail");
         Picasso.get().load(Server.urlImage + productModel.getImage()).into(imageProductDetail);
         nameProductDetail.setText(productModel.getName());
-        priceProductDetail.setText(Support.ConvertMoney(productModel.getPrice()));
-        priceDiscountProductDetail.setText(Support.ConvertMoney(productModel.getPrice_discounted()));
         descriptionProdcutDetail.setText(productModel.getDescription());
+        if (productModel.getPrice_discounted() > 0) {
+            priceDiscountProductDetail.setText(Support.ConvertMoney(productModel.getPrice_discounted()));
+            priceProductDetail.setText(Support.ConvertMoney(productModel.getPrice()));
+        } else {
+            priceDiscountProductDetail.setText(Support.ConvertMoney(productModel.getPrice()));
+            priceProductDetail.setText("");
+        }
     }
 
     private void setControl() {
@@ -77,6 +81,7 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
         quantityProductDetail = findViewById(R.id.quantityProductDetail);
         btnBuyNow = findViewById(R.id.btnBuyNow);
         btnAddCart = findViewById(R.id.btnAddCart);
+        priceProductDetail.setPaintFlags(priceProductDetail.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
     }
 
     @Override
@@ -89,43 +94,55 @@ public class ProductDetailActivity extends AppCompatActivity implements View.OnC
                 finish();
                 break;
             case R.id.btnAddCart:
-                AddCart();
+                if (!quantityProductDetail.getText().toString().equals(""))
+                    AddCart();
                 break;
             case R.id.btnBuyNow:
-                if(Integer.parseInt(quantityProductDetail.getText().toString())!=0) {
+                if (quantityProductDetail.getText().toString().equals(""))
+                    break;
+                int quantity = Integer.parseInt(quantityProductDetail.getText().toString());
+                if (quantity != 0) {
+
                     AddCart();
                     Intent intent = new Intent(ProductDetailActivity.this, MainActivity.class);
                     intent.putExtra("checkBuyNow", true);
                     startActivity(intent);
                 }
+
                 break;
         }
     }
 
     private void AddCart() {
-        boolean check=false;
-        int quantity= Integer.parseInt(quantityProductDetail.getText().toString());
-        if(quantity==0)
+        boolean check = false;
+        int quantity = Integer.parseInt(quantityProductDetail.getText().toString());
+        if (quantity == 0)
             return;
-        for(CartModel item : listCart)
-        {
-            if(item.getProductModel().getCode().equals(productModel.getCode())) {
-                CartModel cartModel=item;
+        for (CartModel item : listCart) {
+            if (item.getProductModel().getCode().equals(productModel.getCode())) {
+                check = true;
+                CartModel cartModel = item;
+                if (quantity > cartModel.getQuantityRemain()) {
+                    Toast.makeText(this, "Hết hàng.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 listCart.remove(item);
-
-                cartModel.setQuantity(cartModel.getQuantity()+quantity);
-                check=true;
+                cartModel.setQuantityRemain(cartModel.getQuantityRemain() - quantity);
+                cartModel.setQuantity(cartModel.getQuantity() + quantity);
                 listCart.add(cartModel);
-
                 break;
             }
         }
-        if(!check)
-            listCart.add(new CartModel(productModel,Integer.parseInt(quantityProductDetail.getText().toString())));
-        Toast.makeText(this,"Thêm sản phẩm thành công.",Toast.LENGTH_SHORT).show();
+        if (!check) {
+            if (quantity > productModel.getQuantity()) {
+                Toast.makeText(this, "Hết hàng.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            listCart.add(new CartModel(productModel, quantity, productModel.getQuantity() - quantity));
+        }
+        Toast.makeText(this, "Thêm sản phẩm thành công.", Toast.LENGTH_SHORT).show();
         SharedPreferences.Editor editorCart = sharedPreferencesCart.edit();
-
-        editorCart.putString("item_cart",new Gson().toJson(listCart));
+        editorCart.putString("item_cart", new Gson().toJson(listCart));
         editorCart.commit();
     }
 }

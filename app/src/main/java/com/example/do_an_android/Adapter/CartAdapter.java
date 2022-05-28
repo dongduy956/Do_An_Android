@@ -18,13 +18,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.do_an_android.Activity.MainActivity;
 import com.example.do_an_android.Model.CartModel;
+import com.example.do_an_android.Model.ProductModel;
 import com.example.do_an_android.Model.Server;
 import com.example.do_an_android.Model.Support;
 import com.example.do_an_android.R;
 import com.example.do_an_android._Fragment.CartFragment;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -32,11 +39,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     Context context;
     int layout;
     ArrayList<CartModel> lstCart;
-
     public CartAdapter(Context context, int layout, ArrayList<CartModel> lstCart) {
         this.context = context;
         this.layout = layout;
         this.lstCart = lstCart;
+
+
     }
 
     @NonNull
@@ -44,31 +52,44 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     public CartViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new CartViewHolder(LayoutInflater.from(context).inflate(layout, null));
     }
-
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, @SuppressLint("RecyclerView") int position) {
         CartModel cart = lstCart.get(position);
+
+        long price = 0;
+        if (cart.getProductModel().getPrice_discounted() > 0)
+            price = cart.getProductModel().getPrice_discounted();
+        else
+            price = cart.getProductModel().getPrice();
         Picasso.get().load(Server.urlImage + cart.getProductModel().getImage()).into(holder.image);
         holder.quantity.setText(cart.getQuantity() + "");
-        holder.subtotal.setText(Support.ConvertMoney(cart.getQuantity() * cart.getProductModel().getPrice()));
-        holder.price.setText(Support.ConvertMoney(cart.getProductModel().getPrice()));
+        holder.subtotal.setText(Support.ConvertMoney(cart.getQuantity() * price));
+        holder.price.setText(Support.ConvertMoney(price));
         holder.name.setText(cart.getProductModel().getName());
+        long finalPrice = price;
         holder.quantity.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                if (keyEvent.getAction()!=KeyEvent.ACTION_DOWN)
+                if (keyEvent.getAction() != KeyEvent.ACTION_DOWN)
                     return true;
                 if (i == KeyEvent.KEYCODE_ENTER) {
+                    if(holder.quantity.getText().toString().equals(""))
+                        return false;
                     int quantity = Integer.parseInt(holder.quantity.getText().toString());
-                    if(quantity==0)
-                    {
+                    if (quantity == 0) {
                         lstCart.remove(lstCart.get(position));
                         CartFragment.updateCart(lstCart);
                         notifyDataSetChanged();
-                    }
-                    else {
-                        holder.subtotal.setText(Support.ConvertMoney(quantity * cart.getProductModel().getPrice()));
+                    } else {
+                        int quantityRemain=cart.getQuantityRemain()+cart.getQuantity();
+                        if(quantity>quantityRemain)
+                        {
+                            Toast.makeText(context,"Hết hàng.",Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+                        holder.subtotal.setText(Support.ConvertMoney(quantity * finalPrice));
                         lstCart.get(position).setQuantity(quantity);
+                        lstCart.get(position).setQuantityRemain(quantityRemain-quantity);
                         CartFragment.updateCart(lstCart);
                     }
                 }
@@ -78,17 +99,19 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-               confirmDetele(position);
+                confirmDetele(position);
                 return true;
             }
         });
+
+
     }
 
     private void confirmDetele(int position) {
-        CartModel cartModel=lstCart.get(position);
-        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        CartModel cartModel = lstCart.get(position);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Thông báo!");
-        builder.setMessage("Bạn có muốn xoá sản phẩm "+cartModel.getProductModel().getName()+"?");
+        builder.setMessage("Bạn có muốn xoá sản phẩm " + cartModel.getProductModel().getName() + "?");
         builder.setIcon(R.drawable.icon);
         builder.setPositiveButton("Có", new DialogInterface.OnClickListener() {
             @Override

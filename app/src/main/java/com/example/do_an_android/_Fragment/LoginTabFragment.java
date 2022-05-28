@@ -1,5 +1,6 @@
 package com.example.do_an_android._Fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -42,9 +43,17 @@ public class LoginTabFragment extends Fragment implements View.OnClickListener {
     SharedPreferences sharedPreferencesRemember;
     SharedPreferences sharedPreferencesUser;
 
+    Boolean checkPayOrder = false;
+
+    public LoginTabFragment(Context context, Boolean checkPayOrder) {
+        this.context = context;
+        this.checkPayOrder = checkPayOrder;
+
+    }
 
     public LoginTabFragment(Context context) {
         this.context = context;
+
     }
 
     private boolean validateEditText(EditText txt, String description) {
@@ -68,19 +77,18 @@ public class LoginTabFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         setControl(view);
         checkRemember();
-        sharedPreferencesUser=context.getSharedPreferences("user", Context.MODE_PRIVATE);
+        sharedPreferencesUser = context.getSharedPreferences("user", Context.MODE_PRIVATE);
         btnLogin.setOnClickListener(this);
 
     }
 
     private void checkRemember() {
-        sharedPreferencesRemember=context.getSharedPreferences("login", Context.MODE_PRIVATE);
+        sharedPreferencesRemember = context.getSharedPreferences("login", Context.MODE_PRIVATE);
         //load thông tin đã lưu lên textbox
-        boolean isRemember =sharedPreferencesRemember.getBoolean("isRemember",false);
-        if(isRemember)
-        {
-            username_login.setText(sharedPreferencesRemember.getString("username",""));
-            password_login.setText(sharedPreferencesRemember.getString("password",""));
+        boolean isRemember = sharedPreferencesRemember.getBoolean("isRemember", false);
+        if (isRemember) {
+            username_login.setText(sharedPreferencesRemember.getString("username", ""));
+            password_login.setText(sharedPreferencesRemember.getString("password", ""));
         }
         ckbRemember.setChecked(isRemember);
     }
@@ -113,18 +121,20 @@ public class LoginTabFragment extends Fragment implements View.OnClickListener {
                 if (response.toString().equals("fail"))
                     Toast.makeText(context, "Sai tài khoản hoặc mật khẩu.", Toast.LENGTH_SHORT).show();
                 else {
-                    SharedPreferences.Editor editorRemember=sharedPreferencesRemember.edit();
-                    SharedPreferences.Editor editorUser=sharedPreferencesUser.edit();
-                    editorUser.putString("username",username_login.getText().toString());
+                    SharedPreferences.Editor editorRemember = sharedPreferencesRemember.edit();
+                    SharedPreferences.Editor editorUser = sharedPreferencesUser.edit();
+                    editorUser.putString("username", username_login.getText().toString());
                     editorUser.commit();
-                    if (ckbRemember.isChecked())
-                    {
-                        editorRemember.putString("username",username_login.getText().toString());
-                        editorRemember.putString("password",password_login.getText().toString());
+                    if (ckbRemember.isChecked()) {
+                        editorRemember.putString("username", username_login.getText().toString());
+                        editorRemember.putString("password", password_login.getText().toString());
                     }
-                    editorRemember.putBoolean("isRemember",ckbRemember.isChecked());
+                    editorRemember.putBoolean("isRemember", ckbRemember.isChecked());
                     editorRemember.commit();
-                    startActivity(new Intent(context,MainActivity.class));
+                    Intent intent=new Intent(context, MainActivity.class);
+                    if(checkPayOrder)
+                       intent.putExtra("checkBuyNow",true);
+                    startActivity(intent);
                 }
             }
         }, new Response.ErrorListener() {

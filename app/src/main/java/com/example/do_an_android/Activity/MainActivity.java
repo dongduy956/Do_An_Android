@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         else {
             boolean checkPayCart = getIntent().getBooleanExtra("checkPayCart", false);
             if (checkPayCart)
-                fm = new LoginSignupFragment(this);
+                fm = new LoginSignupFragment(this,checkPayCart);
             else
                 fm = new HomeFragment(this);
         }

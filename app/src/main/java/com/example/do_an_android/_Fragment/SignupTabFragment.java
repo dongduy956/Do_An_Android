@@ -59,8 +59,6 @@ import retrofit2.Callback;
 
 
 public class SignupTabFragment extends Fragment implements View.OnClickListener {
-
-
     EditText username_sigup, password_signup, password_confirm_signup, name_signup, address_signup, phone_signup;
     Button btnSignup;
     Context context;
@@ -186,8 +184,12 @@ public class SignupTabFragment extends Fragment implements View.OnClickListener 
     private void Sigup() {
         File file = new File(realPath);
         String file_path = file.getAbsolutePath();
-        String[] arrayNameFile = file_path.split("\\.");
-        file_path = arrayNameFile[0] + System.currentTimeMillis() + "." + arrayNameFile[1];
+        try {
+            String[] arrayNameFile = file_path.split("\\.");
+            file_path = arrayNameFile[0] + System.currentTimeMillis() + "." + arrayNameFile[1];
+        }catch (Exception ex){
+
+        }
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("uploaded_file", file_path, requestBody);
         DataClient dataClient = APIUtils.getData();
@@ -204,7 +206,8 @@ public class SignupTabFragment extends Fragment implements View.OnClickListener 
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Log.d("duy", "onFailure: "+t.getMessage());
+                insertCustomer();
+
             }
         });
 
@@ -240,6 +243,7 @@ public class SignupTabFragment extends Fragment implements View.OnClickListener 
                 params.put("address", address_signup.getText().toString());
                 params.put("phone", phone_signup.getText().toString());
                 params.put("image", image);
+                image="";
                 return params;
             }
         };

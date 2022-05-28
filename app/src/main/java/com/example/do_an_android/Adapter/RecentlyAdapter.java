@@ -3,6 +3,7 @@ package com.example.do_an_android.Adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.do_an_android.Activity.ProductDetailActivity;
 import com.example.do_an_android.Model.ProductModel;
 import com.example.do_an_android.Model.Server;
+import com.example.do_an_android.Model.Support;
 import com.example.do_an_android.R;
 import com.squareup.picasso.Picasso;
 
@@ -49,7 +51,7 @@ public class RecentlyAdapter extends RecyclerView.Adapter<RecentlyAdapter.Recent
         Log.d("haha", "onBindViewHolder: "+productModel.getImage());
         Picasso.get().load(Server.urlImage+productModel.getImage()).into(holder.recentlyImageView);
         holder.recentlyName.setText(productModel.getName());
-
+        holder.recentlyPrice.setText(Support.ConvertMoney(productModel.getPrice()));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,13 +73,15 @@ public class RecentlyAdapter extends RecyclerView.Adapter<RecentlyAdapter.Recent
     public  static class RecentlyView extends RecyclerView.ViewHolder{
 
         ImageView recentlyImageView;
-        TextView recentlyName;
+        TextView recentlyName,recentlyPrice,donvitien;
 
         public RecentlyView(@NonNull View itemView) {
             super(itemView);
             recentlyImageView = itemView.findViewById(R.id.productImageRecently);
             recentlyName = itemView.findViewById(R.id.productNameRecently);
-
+            recentlyPrice=itemView.findViewById(R.id.productPriceRecently);
+            donvitien=itemView.findViewById(R.id.donvitien);
+            donvitien.setPaintFlags(donvitien.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         }
     }
 

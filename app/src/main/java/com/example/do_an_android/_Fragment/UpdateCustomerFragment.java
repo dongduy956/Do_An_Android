@@ -111,7 +111,8 @@ ImageView imageUpdateCustomer;
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    Picasso.get().load(Server.urlImage + response.getString("image")).into(imageCustomer);
+                    image=response.getString("image");
+                    Picasso.get().load(Server.urlImage + image).into(imageCustomer);
                     name_updateCustomer.setText(response.getString("name"));
                     address_updateCustomer.setText(response.getString("address"));
                     phone_updateCustomer.setText(0 + response.getString("phone"));
@@ -285,8 +286,12 @@ ImageView imageUpdateCustomer;
             return;
         File file = new File(realPath);
         String file_path = file.getAbsolutePath();
-        String[] arrayNameFile = file_path.split("\\.");
-        file_path = arrayNameFile[0] + System.currentTimeMillis() + "." + arrayNameFile[1];
+        try {
+            String[] arrayNameFile = file_path.split("\\.");
+            file_path = arrayNameFile[0] + System.currentTimeMillis() + "." + arrayNameFile[1];
+        }catch (Exception ex){
+
+        }
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("uploaded_file", file_path, requestBody);
         DataClient dataClient = APIUtils.getData();
@@ -303,7 +308,7 @@ ImageView imageUpdateCustomer;
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Log.d("duy", "onFailure: "+t.getMessage());
+                updateTextCustomer();
             }
         });
     }

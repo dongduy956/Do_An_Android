@@ -27,8 +27,13 @@ public class LoginSignupFragment extends Fragment {
     ViewPagerAdapter viewpagerAdapter;
     SharedPreferences sharedPreferencesUser;
     TextView titleLoginSignup;
+    Boolean checkPayOrder=false;
     public LoginSignupFragment(Context context) {
         this.context = context;
+    }
+    public LoginSignupFragment(Context context,Boolean checkPayOrder) {
+        this.context = context;
+        this.checkPayOrder = checkPayOrder;
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,7 +49,10 @@ public class LoginSignupFragment extends Fragment {
         viewpagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         tabLayout.setupWithViewPager(viewPager);
         if(sharedPreferencesUser.getString("username","fail").equals("fail")) {
+            if(!checkPayOrder)
             viewpagerAdapter.addFragment(new LoginTabFragment(context), "Đăng nhập");
+            else
+                viewpagerAdapter.addFragment(new LoginTabFragment(context,checkPayOrder), "Đăng nhập");
             viewpagerAdapter.addFragment(new SignupTabFragment(getContext()), "Đăng kí");
         }
         else

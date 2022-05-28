@@ -1,8 +1,10 @@
 package com.example.do_an_android.Adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,7 +57,7 @@ public class OrderofCustomerAdapter extends RecyclerView.Adapter<OrderofCustomer
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewOrderOfCustomer holder, int position) {
+    public void onBindViewHolder(@NonNull ViewOrderOfCustomer holder, @SuppressLint("RecyclerView") int position) {
         OrderModel orderModel = orderModelArrayList.get(position);
         holder.codeOrderOfCustomer.setText(orderModel.getCode());
         holder.dateOrderOfCustomer.setText(orderModel.getCreateDate());
@@ -87,6 +89,8 @@ public class OrderofCustomerAdapter extends RecyclerView.Adapter<OrderofCustomer
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject object=response.getJSONObject(i);
+                        Log.d("duy", "getDataOrderDetail: "+object.getInt("quantity"));
+
                         orderDetailModelArrayList.add(new OrderDetailModel(object.getString("code_order"),object.getString("name_product"),object.getLong("price"),object.getInt("quantity"),object.getLong("total")));
                     } catch (JSONException e) {
                         e.printStackTrace();

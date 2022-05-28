@@ -1,6 +1,7 @@
 package com.example.do_an_android.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,6 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
     public ViewOrderDetail onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ViewOrderDetail(LayoutInflater.from(context).inflate(layout, null));
     }
-
     @Override
     public void onBindViewHolder(@NonNull ViewOrderDetail holder, int position) {
         OrderDetailModel orderDetailModel = orderDetailModelArrayList.get(position);

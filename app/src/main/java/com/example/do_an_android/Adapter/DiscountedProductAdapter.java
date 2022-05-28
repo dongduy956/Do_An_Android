@@ -2,6 +2,7 @@ package com.example.do_an_android.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.do_an_android.Activity.ProductDetailActivity;
 import com.example.do_an_android.Model.ProductModel;
 import com.example.do_an_android.Model.Server;
+import com.example.do_an_android.Model.Support;
 import com.example.do_an_android.R;
 import com.squareup.picasso.Picasso;
 
@@ -48,6 +50,8 @@ public class DiscountedProductAdapter extends RecyclerView.Adapter<DiscountedPro
         Log.d("haha", "onBindViewHolder: "+productModel.getImage());
       Picasso.get().load(Server.urlImage+productModel.getImage()).into(holder.discountImageView);
       holder.discountName.setText(productModel.getName());
+        holder.discountPrice.setText(Support.ConvertMoney(productModel.getPrice()));
+        holder.discountSalePrice.setText(Support.ConvertMoney(productModel.getPrice_discounted()));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,13 +72,15 @@ public class DiscountedProductAdapter extends RecyclerView.Adapter<DiscountedPro
     public static class DiscountedProductViewHolder extends RecyclerView.ViewHolder {
 
         ImageView discountImageView;
-        TextView discountName;
+        TextView discountName,discountPrice,discountSalePrice;
 
         public DiscountedProductViewHolder(@NonNull View itemView) {
             super(itemView);
             discountImageView = itemView.findViewById(R.id.productImageDiscount);
             discountName = itemView.findViewById(R.id.productNameDiscount);
-
+            discountPrice=itemView.findViewById(R.id.productPriceDiscount);
+            discountSalePrice=itemView.findViewById(R.id.productPriceSaleDiscount);
+            discountPrice.setPaintFlags(discountPrice.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
         }
     }
 }
