@@ -117,7 +117,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/address_updateCustomer"
             app:layout_constraintVertical_bias="0" />
-
+        <ImageView
+            android:id="@+id/imageUpdateCustomer"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/no_image"
+            app:layout_constraintVertical_bias="0"
+            android:layout_marginTop="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/phone_updateCustomer" />
         <Button
             android:id="@+id/btnUpdateCustomer"
             android:layout_width="0dp"
@@ -131,7 +141,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/phone_updateCustomer"
+            app:layout_constraintTop_toBottomOf="@+id/imageUpdateCustomer"
             app:layout_constraintVertical_bias="0"
             android:layout_marginTop="30dp"
             />

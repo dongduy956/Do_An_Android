@@ -1,18 +1,31 @@
 package com.example.do_an_android._Fragment;
 
+
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -26,12 +39,23 @@ import com.android.volley.toolbox.Volley;
 import com.example.do_an_android.Model.Server;
 import com.example.do_an_android.Model.Support;
 import com.example.do_an_android.R;
+import com.example.do_an_android.Retrofit2.APIUtils;
+import com.example.do_an_android.Retrofit2.DataClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 
 public class SignupTabFragment extends Fragment implements View.OnClickListener {
@@ -40,6 +64,10 @@ public class SignupTabFragment extends Fragment implements View.OnClickListener 
     EditText username_sigup, password_signup, password_confirm_signup, name_signup, address_signup, phone_signup;
     Button btnSignup;
     Context context;
+    ImageView imageSignup;
+    String realPath = "";
+    String image="";
+    private static final int REQUEST_CODE_IMAGE_SIGNUP = 764;
 
     public SignupTabFragment(Context context) {
         this.context = context;
@@ -56,6 +84,7 @@ public class SignupTabFragment extends Fragment implements View.OnClickListener 
         super.onViewCreated(view, savedInstanceState);
         setControl(view);
         btnSignup.setOnClickListener(this);
+        imageSignup.setOnClickListener(this);
     }
 
 
@@ -77,9 +106,11 @@ public class SignupTabFragment extends Fragment implements View.OnClickListener 
         address_signup = view.findViewById(R.id.address_signup);
         phone_signup = view.findViewById(R.id.phone_signup);
         btnSignup = view.findViewById(R.id.btnSignup);
+        imageSignup = view.findViewById(R.id.imageSignup);
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onClick(View view) {
         int id = view.getId();
@@ -98,9 +129,47 @@ public class SignupTabFragment extends Fragment implements View.OnClickListener 
                         password_confirm_signup.requestFocus();
                     }
                 }
+                break;
+            case R.id.imageSignup:
+                if(context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED) {
+                    //xin quyen
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},111);
+                } else {
+                    Intent intent = new Intent(Intent.ACTION_PICK);
+                    intent.setType("image/*");
+                    startActivityForResult(intent, REQUEST_CODE_IMAGE_SIGNUP);
+                }
 
                 break;
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==111 &&grantResults[0]== PackageManager.PERMISSION_GRANTED)
+        {
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            startActivityForResult(intent, REQUEST_CODE_IMAGE_SIGNUP);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQUEST_CODE_IMAGE_SIGNUP && resultCode == ((Activity) context).RESULT_OK && data != null) {
+            Uri uri = data.getData();
+            realPath = getRealPathFromURI(uri);
+            try {
+                InputStream inputStream = context.getContentResolver().openInputStream(uri);
+                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                imageSignup.setImageBitmap(bitmap);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
     private void _Clear() {
@@ -111,22 +180,45 @@ public class SignupTabFragment extends Fragment implements View.OnClickListener 
         phone_signup.setText("");
         password_confirm_signup.setText("");
         username_sigup.requestFocus();
+        imageSignup.setImageResource(R.drawable.no_image);
     }
 
     private void Sigup() {
+        File file = new File(realPath);
+        String file_path = file.getAbsolutePath();
+        String[] arrayNameFile = file_path.split("\\.");
+        file_path = arrayNameFile[0] + System.currentTimeMillis() + "." + arrayNameFile[1];
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("uploaded_file", file_path, requestBody);
+        DataClient dataClient = APIUtils.getData();
+        retrofit2.Call<String> callback = dataClient.UploadImage(body);
+        callback.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                if(response!=null)
+                {
+                    image =response.body();
+                   insertCustomer();
+                }
+            }
 
-        RequestQueue queue = Volley.newRequestQueue(context);
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.d("duy", "onFailure: "+t.getMessage());
+            }
+        });
+
+    }
+
+    private void insertCustomer() {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Server.urlSignup, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
-
                 if (response.toString().equals("0"))
                     Toast.makeText(context, "Trùng tên tài khoản.", Toast.LENGTH_SHORT).show();
                 else if (response.toString().equals("-1"))
                     Toast.makeText(context, "Có lỗi xảy ra.", Toast.LENGTH_SHORT).show();
-                else
-                {
+                else {
                     _Clear();
                     Toast.makeText(context, "Đăng kí thành công.", Toast.LENGTH_SHORT).show();
 
@@ -147,9 +239,22 @@ public class SignupTabFragment extends Fragment implements View.OnClickListener 
                 params.put("password", Support.EndcodeMD5(password_signup.getText().toString()));
                 params.put("address", address_signup.getText().toString());
                 params.put("phone", phone_signup.getText().toString());
+                params.put("image", image);
                 return params;
             }
         };
-        queue.add(stringRequest);
+        Volley.newRequestQueue(context).add(stringRequest);
+    }
+
+    public String getRealPathFromURI(Uri contentUri) {
+        String path = null;
+        String[] proj = {MediaStore.MediaColumns.DATA};
+        Cursor cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
+        if (cursor.moveToFirst()) {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+            path = cursor.getString(column_index);
+        }
+        cursor.close();
+        return path;
     }
 }
