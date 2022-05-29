@@ -1,6 +1,7 @@
 package com.example.do_an_android.Adapter;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +48,8 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
     }
 
     public static class ViewOrderDetail extends RecyclerView.ViewHolder {
-        TextView nameProductOrderDetail, quantityOrderDetail, priceOrderDetail, totalOrderDetail;
+        TextView nameProductOrderDetail, quantityOrderDetail, priceOrderDetail
+                , totalOrderDetail,unitTotalOrderDetail,unitPriceOrderDetail;
 
         public ViewOrderDetail(@NonNull View itemView) {
             super(itemView);
@@ -55,6 +57,10 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
             quantityOrderDetail = itemView.findViewById(R.id.quantityOrderDetail);
             priceOrderDetail = itemView.findViewById(R.id.priceOrderDetail);
             totalOrderDetail = itemView.findViewById(R.id.totalOrderDetail);
+            unitPriceOrderDetail = itemView.findViewById(R.id.unitPriceOrderDetail);
+            unitTotalOrderDetail = itemView.findViewById(R.id.unitTotalOrderDetail);
+            unitPriceOrderDetail.setPaintFlags(unitPriceOrderDetail.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+            unitTotalOrderDetail.setPaintFlags(unitTotalOrderDetail.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         }
     }
 }

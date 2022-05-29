@@ -1,12 +1,15 @@
 package com.example.do_an_android.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,6 +21,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.do_an_android.Adapter.ProductOfTypeAdapter;
 import com.example.do_an_android.Model.CategoryModel;
+import com.example.do_an_android.Model.GridSpacingItemDecoration;
 import com.example.do_an_android.Model.ProductModel;
 import com.example.do_an_android.Model.Server;
 import com.example.do_an_android.R;
@@ -101,11 +105,15 @@ public class ProductsOfTypeActivity extends AppCompatActivity implements View.On
         queue.add(jsonArrayRequest);
     }
 
-
+    private int dpToPx(int dp) {
+        Resources r = getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
     private void setRecyclerAdapter() {
 
         productModelArrayList = new ArrayList<>();
         productOfTypeAdapter = new ProductOfTypeAdapter(this, R.layout.item_product_of_type, productModelArrayList);
+        recycleviewProductsOfType.addItemDecoration(new GridSpacingItemDecoration(2,dpToPx(2),false));
         recycleviewProductsOfType.setAdapter(productOfTypeAdapter);
         recycleviewProductsOfType.setLayoutManager(new GridLayoutManager(this, 2));
     }

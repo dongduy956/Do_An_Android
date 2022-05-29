@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +30,7 @@ import com.example.do_an_android.Activity.PayOrderActivity;
 import com.example.do_an_android.Activity.ProductDetailActivity;
 import com.example.do_an_android.Adapter.CartAdapter;
 import com.example.do_an_android.Model.CartModel;
+import com.example.do_an_android.Model.GridSpacingItemDecoration;
 import com.example.do_an_android.Model.Support;
 import com.example.do_an_android.R;
 import com.google.gson.Gson;
@@ -42,6 +46,7 @@ public class CartFragment extends Fragment implements View.OnClickListener {
     static TextView txttotalquantity_cart, txttotalpay_cart;
     ImageView backCart;
     Button btnPay;
+    TextView unitMoneyCartTotal;
     static SharedPreferences sharedPreferencesUser, sharedPreferencesCart;
 
     public CartFragment(Context context) {
@@ -90,10 +95,14 @@ public class CartFragment extends Fragment implements View.OnClickListener {
 
         CartAdapter cartAdapter = new CartAdapter(getContext(), R.layout.item_cart, lstCart);
         recyclerView.setAdapter(cartAdapter);
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(1,dpToPx(2),false));
         recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
 
     }
-
+    private int dpToPx(int dp) {
+        Resources r = getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
     public static void updateCart(ArrayList<CartModel> cartList) {
         lstCart = cartList;
         int sum = 0;
@@ -119,6 +128,9 @@ public class CartFragment extends Fragment implements View.OnClickListener {
         txttotalpay_cart = view.findViewById(R.id.txttotalpay_cart);
         backCart = view.findViewById(R.id.backCart);
         btnPay = view.findViewById(R.id.btnPay);
+        unitMoneyCartTotal = view.findViewById(R.id.unitMoneyCartTotal);
+        unitMoneyCartTotal.setPaintFlags(unitMoneyCartTotal.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+
     }
 
     @Override

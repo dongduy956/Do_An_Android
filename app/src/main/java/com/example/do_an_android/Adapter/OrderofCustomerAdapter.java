@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Paint;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -140,13 +141,16 @@ public class OrderofCustomerAdapter extends RecyclerView.Adapter<OrderofCustomer
     }
 
     public static class ViewOrderOfCustomer extends RecyclerView.ViewHolder {
-        TextView codeOrderOfCustomer, dateOrderOfCustomer, totalOrderOfCustomer;
+        TextView codeOrderOfCustomer, dateOrderOfCustomer, totalOrderOfCustomer,unitTotalOrderOfCustomer;
 
         public ViewOrderOfCustomer(@NonNull View itemView) {
             super(itemView);
             codeOrderOfCustomer = itemView.findViewById(R.id.codeOrderOfCustomer);
             dateOrderOfCustomer = itemView.findViewById(R.id.dateOrderOfCustomer);
             totalOrderOfCustomer = itemView.findViewById(R.id.totalOrderOfCustomer);
+            unitTotalOrderOfCustomer = itemView.findViewById(R.id.unitTotalOrderOfCustomer);
+            unitTotalOrderOfCustomer.setPaintFlags(unitTotalOrderOfCustomer.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+
         }
     }
 }

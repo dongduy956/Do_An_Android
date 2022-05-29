@@ -29,7 +29,7 @@
                 android:background="@drawable/image_round"
                 android:clipToOutline="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/card1"
+                android:src="@drawable/b1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

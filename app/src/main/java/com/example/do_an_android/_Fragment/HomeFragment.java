@@ -3,6 +3,7 @@ package com.example.do_an_android._Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +38,7 @@ import com.example.do_an_android.Adapter.DiscountedProductAdapter;
 import com.example.do_an_android.Adapter.RecentlyAdapter;
 import com.example.do_an_android.Adapter.SliderAdapter;
 import com.example.do_an_android.Model.CategoryModel;
+import com.example.do_an_android.Model.GridSpacingItemDecoration;
 import com.example.do_an_android.Model.ProductModel;
 import com.example.do_an_android.Model.Server;
 import com.example.do_an_android.R;
@@ -72,7 +75,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     Timer timer;
     Toolbar toolbar;
     SearchView searchView;
-    SharedPreferences sharedPreferencesUser;
 
     public HomeFragment(Context context) {
         this.context = context;
@@ -87,8 +89,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        sharedPreferencesUser = context.getSharedPreferences("user", Context.MODE_PRIVATE);
-        Toast.makeText(context, sharedPreferencesUser.getString("username", "khùng"), Toast.LENGTH_LONG).show();
         setControl(view);
         addDataDiscounted();
         addDataCategory();
@@ -96,12 +96,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 //banner
         setAdapterSlider();
         loadImageSlider();
-
-
-//set icon home
         toolbar.setNavigationIcon(R.drawable.ic_baseline_home_24);
-
-
         setDiscountedRecycler();
         setCategoryRecycler();
         setRecentlyViewedRecycler();
@@ -290,9 +285,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         }, 500, 5000);
     }
-
+    private int dpToPx(int dp) {
+        Resources r = getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
     private void setDiscountedRecycler() {
         discountedProductAdapter = new DiscountedProductAdapter(context, R.layout.item_discounted, discountedProductsList);
+        discountRecyclerView.addItemDecoration(new GridSpacingItemDecoration(discountedProductsList.size()-1,dpToPx(2),false));
         discountRecyclerView.setAdapter(discountedProductAdapter);
         discountRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
     }
@@ -301,12 +300,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void setCategoryRecycler() {
         categoryAdapter = new CategoryAdapter(context, R.layout.item_category, categoryList);
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        categoryRecyclerView.addItemDecoration(new GridSpacingItemDecoration(categoryList.size()-1,dpToPx(2),false));
         categoryRecyclerView.setAdapter(categoryAdapter);
 
     }
 
     private void setRecentlyViewedRecycler() {
         recentlyViewedRecycler.setLayoutManager(new GridLayoutManager(context, 2));
+        recentlyViewedRecycler.addItemDecoration(new GridSpacingItemDecoration(2,dpToPx(2),false));
+
         recentlyViewedAdapter = new RecentlyAdapter(context, R.layout.item_recently, recentlyViewedList);
         recentlyViewedRecycler.setAdapter(recentlyViewedAdapter);
     }

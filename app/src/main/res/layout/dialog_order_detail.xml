@@ -10,8 +10,8 @@
     android:layout_height="wrap_content"
     android:text="Chi tiết đơn hàng 23"
     android:gravity="center"
-    android:textSize="30dp"
-    android:textColor="#FF0000"
+    android:textSize="25dp"
+    android:textColor="@color/orange"
     />
 
     <androidx.recyclerview.widget.RecyclerView

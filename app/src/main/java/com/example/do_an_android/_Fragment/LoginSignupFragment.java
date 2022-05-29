@@ -1,6 +1,7 @@
 package com.example.do_an_android._Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -13,8 +14,10 @@ import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.do_an_android.Activity.MainActivity;
 import com.example.do_an_android.Adapter.ViewPagerAdapter;
 import com.example.do_an_android.R;
 import com.google.android.material.tabs.TabLayout;
@@ -28,6 +31,7 @@ public class LoginSignupFragment extends Fragment {
     SharedPreferences sharedPreferencesUser;
     TextView titleLoginSignup;
     Boolean checkPayOrder=false;
+    ImageView backLoginSignup;
     public LoginSignupFragment(Context context) {
         this.context = context;
     }
@@ -46,11 +50,26 @@ public class LoginSignupFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         setControl(view);
         sharedPreferencesUser = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+       setAdapterViewPager();
+        setClick();
+
+    }
+
+    private void setClick() {
+        backLoginSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(context, MainActivity.class));
+            }
+        });
+    }
+
+    private void setAdapterViewPager() {
         viewpagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         tabLayout.setupWithViewPager(viewPager);
         if(sharedPreferencesUser.getString("username","fail").equals("fail")) {
             if(!checkPayOrder)
-            viewpagerAdapter.addFragment(new LoginTabFragment(context), "Đăng nhập");
+                viewpagerAdapter.addFragment(new LoginTabFragment(context), "Đăng nhập");
             else
                 viewpagerAdapter.addFragment(new LoginTabFragment(context,checkPayOrder), "Đăng nhập");
             viewpagerAdapter.addFragment(new SignupTabFragment(getContext()), "Đăng kí");
@@ -68,5 +87,6 @@ public class LoginSignupFragment extends Fragment {
         viewPager = view.findViewById(R.id.view_pager);
         tabLayout = view.findViewById(R.id.tab_layout);
         titleLoginSignup = view.findViewById(R.id.titleLoginSignup);
+        backLoginSignup = view.findViewById(R.id.backLoginSignup);
     }
 }

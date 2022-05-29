@@ -34,10 +34,10 @@
             android:textColor="@android:color/background_dark" />
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
+        android:background="#F8F8F8"
         android:id="@+id/all_category"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

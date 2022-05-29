@@ -33,11 +33,15 @@
 
 
     </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
+        android:background="#F8F8F8"
+
         android:id="@+id/recycleviewProductsOfType"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/linearProductsOfType"
-        />
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp" />
 
 </RelativeLayout>

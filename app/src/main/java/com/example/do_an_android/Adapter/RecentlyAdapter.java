@@ -51,7 +51,17 @@ public class RecentlyAdapter extends RecyclerView.Adapter<RecentlyAdapter.Recent
         Log.d("haha", "onBindViewHolder: "+productModel.getImage());
         Picasso.get().load(Server.urlImage+productModel.getImage()).into(holder.recentlyImageView);
         holder.recentlyName.setText(productModel.getName());
-        holder.recentlyPrice.setText(Support.ConvertMoney(productModel.getPrice()));
+        if(productModel.getPrice_discounted()>0) {
+            holder.productPriceSaleRecently.setText(Support.ConvertMoney(productModel.getPrice_discounted()));
+            holder.productPriceRecently.setText(Support.ConvertMoney(productModel.getPrice()));
+            holder.unitPriceRecently.setText("đ");
+
+        }else
+        {
+            holder.productPriceSaleRecently.setText(Support.ConvertMoney(productModel.getPrice()));
+            holder.productPriceRecently.setText("");
+            holder.unitPriceRecently.setText("");
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,15 +83,19 @@ public class RecentlyAdapter extends RecyclerView.Adapter<RecentlyAdapter.Recent
     public  static class RecentlyView extends RecyclerView.ViewHolder{
 
         ImageView recentlyImageView;
-        TextView recentlyName,recentlyPrice,donvitien;
+        TextView recentlyName,productPriceSaleRecently,productPriceRecently,unitPriceRecently,unitPriceSaleRecently;
 
         public RecentlyView(@NonNull View itemView) {
             super(itemView);
             recentlyImageView = itemView.findViewById(R.id.productImageRecently);
             recentlyName = itemView.findViewById(R.id.productNameRecently);
-            recentlyPrice=itemView.findViewById(R.id.productPriceRecently);
-            donvitien=itemView.findViewById(R.id.donvitien);
-            donvitien.setPaintFlags(donvitien.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+            productPriceSaleRecently=itemView.findViewById(R.id.productPriceSaleRecently);
+            unitPriceRecently=itemView.findViewById(R.id.unitPriceRecently);
+            unitPriceSaleRecently=itemView.findViewById(R.id.unitPriceSaleRecently);
+            productPriceRecently=itemView.findViewById(R.id.productPriceRecently);
+            unitPriceRecently.setPaintFlags(unitPriceRecently.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+            unitPriceSaleRecently.setPaintFlags(unitPriceSaleRecently.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+            productPriceRecently.setPaintFlags(productPriceRecently.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
         }
     }
 

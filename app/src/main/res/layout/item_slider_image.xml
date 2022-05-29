@@ -6,7 +6,7 @@
         android:id="@+id/slider_image"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:src="@drawable/card1"
+        android:src="@drawable/b1"
         android:scaleType="fitXY"
         />
 

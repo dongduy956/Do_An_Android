@@ -2,17 +2,17 @@
 -- version 5.1.3
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 25, 2022 at 05:20 PM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.5
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th5 29, 2022 lúc 06:08 PM
+-- Phiên bản máy phục vụ: 10.4.24-MariaDB
+-- Phiên bản PHP: 8.1.5
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
 --
--- Database: `dblinhkien`
+-- Cơ sở dữ liệu: `dblinhkien`
 --
 CREATE DATABASE IF NOT EXISTS `dblinhkien` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `dblinhkien`;
@@ -20,67 +20,116 @@ USE `dblinhkien`;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `chitiethoadon`
---
--- Creation: May 25, 2022 at 03:17 PM
+-- Cấu trúc bảng cho bảng `chitiethoadon`
 --
 
 DROP TABLE IF EXISTS `chitiethoadon`;
-CREATE TABLE `chitiethoadon` (
+CREATE TABLE IF NOT EXISTS `chitiethoadon` (
   `MAHD` int(11) NOT NULL,
   `MALINHKIEN` int(11) NOT NULL,
-  `DONGIA` double DEFAULT NULL,
+  `DONGIA` bigint(20) DEFAULT NULL,
   `SOLUONG` int(11) DEFAULT NULL,
-  `TONGITEN` double DEFAULT NULL
+  `TONGITEN` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`MAHD`,`MALINHKIEN`),
+  KEY `FK_CHITIETHOADON_SANPHAM` (`MALINHKIEN`),
+  KEY `FK_CHITIETHOADON_HD` (`MAHD`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- RELATIONSHIPS FOR TABLE `chitiethoadon`:
---   `MAHD`
---       `hoadon` -> `MAHD`
 --   `MALINHKIEN`
 --       `linhkien` -> `MALINHKIEN`
+--   `MAHD`
+--       `hoadon` -> `MAHD`
+--   `MAHD`
+--       `hoadon` -> `MAHD`
+--   `MAHD`
+--       `hoadon` -> `MAHD`
+--   `MAHD`
+--       `hoadon` -> `MAHD`
 --
+
+--
+-- Đang đổ dữ liệu cho bảng `chitiethoadon`
+--
+
+INSERT INTO `chitiethoadon` VALUES
+(58, 2, 30000000, 100, 3000000000),
+(58, 4, 10000000, 100, 1000000000),
+(59, 3, 15490000, 1, 15490000),
+(60, 5, 20990000, 6, 125940000),
+(61, 6, 10000000, 1, 10000000),
+(61, 89, 14490000, 1, 14490000),
+(62, 3, 15490000, 3, 46470000),
+(62, 41, 14490000, 18, 260820000),
+(62, 69, 3000000, 1, 3000000),
+(63, 1, 21990000, 1, 21990000),
+(63, 63, 790000, 3, 2370000),
+(64, 1, 21990000, 1, 21990000),
+(64, 63, 790000, 3, 2370000);
+
+--
+-- Bẫy `chitiethoadon`
+--
+DROP TRIGGER IF EXISTS `trg_chitiethoadon`;
+DELIMITER $$
+CREATE TRIGGER `trg_chitiethoadon` BEFORE INSERT ON `chitiethoadon` FOR EACH ROW UPDATE linhkien SET SOLUONG = SOLUONG - new.SOLUONG 
+    WHERE MALINHKIEN = new.MALINHKIEN
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `hoadon`
---
--- Creation: May 25, 2022 at 03:17 PM
+-- Cấu trúc bảng cho bảng `hoadon`
 --
 
 DROP TABLE IF EXISTS `hoadon`;
-CREATE TABLE `hoadon` (
-  `MAHD` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `hoadon` (
+  `MAHD` int(11) NOT NULL AUTO_INCREMENT,
   `MAKH` varchar(10) DEFAULT NULL,
-  `TONGTIEN` decimal(19,4) DEFAULT NULL,
-  `NGAYLAPHOADON` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `TONGTIEN` bigint(20) DEFAULT NULL,
+  `NGAYLAPHOADON` date DEFAULT NULL,
+  PRIMARY KEY (`MAHD`),
+  KEY `FK_HOADON_KHACHHANG` (`MAKH`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4;
 
 --
 -- RELATIONSHIPS FOR TABLE `hoadon`:
 --   `MAKH`
 --       `khachhang` -> `USERNAME`
+--   `MAKH`
+--       `khachhang` -> `USERNAME`
 --
+
+--
+-- Đang đổ dữ liệu cho bảng `hoadon`
+--
+
+INSERT INTO `hoadon` VALUES
+(58, 'hi', 4000000000, '2022-05-29'),
+(59, 'hi', 15490000, '2022-05-29'),
+(60, 'dongduy', 125940000, '2022-05-29'),
+(61, 'dongduy', 24490000, '2022-05-29'),
+(62, 'dongduy', 310290000, '2022-05-29'),
+(63, 'dongduy', 24360000, '2022-05-29'),
+(64, 'dongduy', 24360000, '2022-05-29');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `khachhang`
---
--- Creation: May 25, 2022 at 03:17 PM
--- Last update: May 25, 2022 at 03:17 PM
+-- Cấu trúc bảng cho bảng `khachhang`
 --
 
 DROP TABLE IF EXISTS `khachhang`;
-CREATE TABLE `khachhang` (
+CREATE TABLE IF NOT EXISTS `khachhang` (
   `USERNAME` varchar(10) NOT NULL,
   `TENKH` varchar(100) DEFAULT NULL,
   `MATKHAU` varchar(100) DEFAULT NULL,
   `DIACHI` varchar(100) DEFAULT NULL,
   `SODT` int(11) DEFAULT NULL,
-  `HINHANH` char(100) DEFAULT NULL
+  `HINHANH` char(100) DEFAULT NULL,
+  PRIMARY KEY (`USERNAME`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -88,34 +137,38 @@ CREATE TABLE `khachhang` (
 --
 
 --
--- Dumping data for table `khachhang`
+-- Đang đổ dữ liệu cho bảng `khachhang`
 --
 
 INSERT INTO `khachhang` VALUES
-('dongduy', 'Dương Đông Duy', '827ccb0eea8a706c4c34a16891f84e7b', 'Ti?n Giang', 703337662, 'staff.png'),
-('ducduy', 'Hồ Đức Duy', '827ccb0eea8a706c4c34a16891f84e7b', 'C?n Tho', 703337662, 'staff.png'),
+('dongduy', 'Dương Đông Duy', '5dc6da3adfe8ccf1287a98c0a8f74496', 'Tiền Giangss', 376880903, 'BIDV_16516429093691653802724023.jpg'),
+('ducduy', 'Hồ Đức Duy', '827ccb0eea8a706c4c34a16891f84e7b', 'Cần Thơ', 703337662, 'staff.png'),
+('duy', 'Dương Đông Duy', '827ccb0eea8a706c4c34a16891f84e7b', 'Tiền Giang', 376880903, 'FB_IMG_16534432551141653744012257.jpg'),
+('duynghia', 'Dương Duy Nghĩa', '211b461416eaa21318ac809d050ce371', 'Tiền Giang province ', 988322241, 'staff.png'),
+('haha', 'a', 'f3c2cefc1f3b082a56f52902484ca511', 'a', 0, ''),
+('hi', 'dương đông duy', '49f68a5c8493ec2c0bf489821c21fc3b', 'tiền giang', 0, 'received_4614633723120461653755013471.jpeg'),
 ('limminh', 'Lim Bảo Minh', '827ccb0eea8a706c4c34a16891f84e7b', 'TP.HCM', 703337662, 'staff.png');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `linhkien`
---
--- Creation: May 25, 2022 at 03:19 PM
+-- Cấu trúc bảng cho bảng `linhkien`
 --
 
 DROP TABLE IF EXISTS `linhkien`;
-CREATE TABLE `linhkien` (
-  `MALINHKIEN` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `linhkien` (
+  `MALINHKIEN` int(11) NOT NULL AUTO_INCREMENT,
   `TENLINHKIEN` varchar(200) DEFAULT NULL,
-  `GIATIEN` float DEFAULT NULL,
+  `GIATIEN` bigint(20) DEFAULT NULL,
   `SOLUONG` int(11) DEFAULT NULL,
-  `GIATIENKHUYENMAI` double DEFAULT NULL,
+  `GIATIENKHUYENMAI` bigint(20) DEFAULT NULL,
   `MOTA` varchar(500) DEFAULT NULL,
   `HINHANH` varchar(100) DEFAULT NULL,
   `NGAYCAPNHAT` date DEFAULT NULL,
-  `MALLINHKIEN` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `MALLINHKIEN` int(11) DEFAULT NULL,
+  PRIMARY KEY (`MALINHKIEN`),
+  KEY `FK_LINHKIEN_LOAILINHKIEN` (`MALLINHKIEN`)
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4;
 
 --
 -- RELATIONSHIPS FOR TABLE `linhkien`:
@@ -124,16 +177,16 @@ CREATE TABLE `linhkien` (
 --
 
 --
--- Dumping data for table `linhkien`
+-- Đang đổ dữ liệu cho bảng `linhkien`
 --
 
 INSERT INTO `linhkien` VALUES
-(1, 'ASUS ROG STRIX G G512 IAL013T', 21990000, 100, 0, 'Laptop Asus Gaming ROG Strix G512 i5 (IAL013T) mang đến ngôn ngữ thiết kế hiện đại, cấu hình mạnh mẽ với vi xử lí gen 10 mới, card đồ họa rời GeForce GTX 1650Ti, chiến những tựa game nặng kí nhất.', 'imagelp1.jpg', '2022-05-25', 1),
-(2, 'MACBOOK PRO 13 2020 Z11B000CT', 36990000, 100, 30000000, 'Apple trang bị cho MacBook Pro 2020 chip bảo mật T2 mã hóa dữ liệu ổ cứng cùng với cảm biến vân tay nhỏ gọn được tích hợp giúp bạn có thể mở máy nhanh chóng, không cần mất thời gian nhập mật mã, thanh toán trực tuyến dễ dàng.', 'imagelp2.jpg', '2022-05-25', 1),
-(3, 'ACER ASPIRE 3 A315 57G 524Z', 15490000, 100, 0, 'Card đồ họa rời NVIDIA GeForce MX330 mạnh mẽ xử lý tốt tác vụ đồ họa. Màn hình 15.6 inch Full HD hiển thị hình ảnh sắc nét, màu sắc chân thực', 'imagelp3.jpg', '2022-05-25', 1),
-(4, 'ASUS VIVOBOOK D515UA Ẹ045T', 13490000, 100, 10000000, 'Chiếc máy trang bị bộ vi xử lý Intel Core i3 thế hệ 10, với 4 GB RAM kèm ổ cứng 128 GB chuẩn SSD sẽ mang lại hiệu năng vượt trội để giúp bạn yên tâm xử lý công việc lẫn giải trí thoải mái.', 'imagelp4.jpg', '2022-05-25', 1),
-(5, 'MSI MODERN 14 B11MO 011VN', 20990000, 100, 0, 'Được đánh giá là mẫu laptop có hiệu năng cực cao khi trang bị CPU Intel 11th với chất liệu vỏ nhôm nguyên khối toàn bộ và thiết kế sang trọng, nhỏ gọn tăng tính cơ động và có thời lượng pin dài sẽ rất phù hợp với Nhân viên văn phòng, Học sinh và sinh, giới trẻ đam mê sáng tạo, thích sự năng động.', 'imagelp5.jpg', '2022-05-25', 1),
-(6, 'LENOVO IDEAPAD	SLIM 3 14IIL05 81WD00VJVN', 10490000, 100, 10000000, 'Intel Core i3-1005G1 (1.20GHz up to 3.40GHz, 4MB Cache) 14.0 inch FHD (1920x1080) TN 220nits Anti-glare, 60Hz', 'imagelp6.jpg', '2022-05-25', 1),
+(1, 'ASUS ROG STRIX G G512 IAL013T', 21990000, 43, 0, 'Laptop Asus Gaming ROG Strix G512 i5 (IAL013T) mang đến ngôn ngữ thiết kế hiện đại, cấu hình mạnh mẽ với vi xử lí gen 10 mới, card đồ họa rời GeForce GTX 1650Ti, chiến những tựa game nặng kí nhất.', 'imagelp1.jpg', '2022-05-25', 1),
+(2, 'MACBOOK PRO 13 2020 Z11B000CT', 36990000, 0, 30000000, 'Apple trang bị cho MacBook Pro 2020 chip bảo mật T2 mã hóa dữ liệu ổ cứng cùng với cảm biến vân tay nhỏ gọn được tích hợp giúp bạn có thể mở máy nhanh chóng, không cần mất thời gian nhập mật mã, thanh toán trực tuyến dễ dàng.', 'imagelp2.jpg', '2022-05-25', 1),
+(3, 'ACER ASPIRE 3 A315 57G 524Z', 15490000, 96, 0, 'Card đồ họa rời NVIDIA GeForce MX330 mạnh mẽ xử lý tốt tác vụ đồ họa. Màn hình 15.6 inch Full HD hiển thị hình ảnh sắc nét, màu sắc chân thực', 'imagelp3.jpg', '2022-05-25', 1),
+(4, 'ASUS VIVOBOOK D515UA Ẹ045T', 13490000, 0, 10000000, 'Chiếc máy trang bị bộ vi xử lý Intel Core i3 thế hệ 10, với 4 GB RAM kèm ổ cứng 128 GB chuẩn SSD sẽ mang lại hiệu năng vượt trội để giúp bạn yên tâm xử lý công việc lẫn giải trí thoải mái.', 'imagelp4.jpg', '2022-05-25', 1),
+(5, 'MSI MODERN 14 B11MO 011VN', 20990000, 94, 0, 'Được đánh giá là mẫu laptop có hiệu năng cực cao khi trang bị CPU Intel 11th với chất liệu vỏ nhôm nguyên khối toàn bộ và thiết kế sang trọng, nhỏ gọn tăng tính cơ động và có thời lượng pin dài sẽ rất phù hợp với Nhân viên văn phòng, Học sinh và sinh, giới trẻ đam mê sáng tạo, thích sự năng động.', 'imagelp5.jpg', '2022-05-25', 1),
+(6, 'LENOVO IDEAPAD	SLIM 3 14IIL05 81WD00VJVN', 10490000, 99, 10000000, 'Intel Core i3-1005G1 (1.20GHz up to 3.40GHz, 4MB Cache) 14.0 inch FHD (1920x1080) TN 220nits Anti-glare, 60Hz', 'imagelp6.jpg', '2022-05-25', 1),
 (7, 'ASUS H410M-E', 1865000, 100, 0, 'Socket: Socket 1200 hỗ trợ CPU intel thế hệ 10. Kích thước: m-ATX. Khe cắm RAM: 2 khe (Tối đa 64GB)', 'imagemb1.jpg', '2022-05-25', 2),
 (8, 'GIGABYTE B460M GAMING HD', 1990000, 100, 1000000, 'Intel® B460 Gaming Motherboard with GIGABYTE 8118 Gaming LAN, PCIe Gen3 x4 M.2, Anti-Sulfur Resistor, Smart Fan 5', 'imagemb2.jpg', '2022-05-25', 2),
 (9, 'ASUS H410M-CS', 1810000, 100, 0, 'Socket Intel® LGA 1200: Sẵn sàng cho bộ xử lý Intel® Core ™ thế hệ thứ 10. Bảo vệ 5X III: Bảo vệ nhiều phần cứng để bảo vệ toàn diện', 'imagemb3.jpg', '2022-05-25', 2),
@@ -156,7 +209,7 @@ INSERT INTO `linhkien` VALUES
 (26, 'MSI Geforce RTX 3080 SUPRIM X 10G', 60990000, 100, 60000000, 'NVIDIA DLSS là công nghệ kết xuất đột phá nhờ sự hỗ trợ của trí tuệ nhân tạo (AI), giúp tăng tốc độ khung hình lên ít nhất 1,5 lần mà chất lượng hình ảnh không bị suy giảm nhờ sức mạnh của Nhân Tensor xử lý AI chuyên dụng trên GeForce RTX 3080.', 'imagevg3.jpg', '2022-05-25', 5),
 (27, 'GIGABYTE AORUS Geforce RTX 3070 MASTER 8G', 35990000, 100, 0, 'NVIDIA Ampere Streaming Multiprocessors. 2nd Generation RT Cores. 3rd Generation Tensor Cores', 'imagevg4.jpg', '2022-05-25', 5),
 (28, 'GIGABYTE AORUS Radeon RX 6800 MASTER 16G', 31990000, 100, 31000000, 'Boost Clock* : up to 2310 MHz (Reference card: 2250 MHz).Game Clock* : up to 2065 MHz (Reference card: 2015 MHz)', 'imagevg5.jpg', '2022-05-25', 5),
-(29, 'ASUS Dual Radeon RX 6700', 22490000, 100, 22000000, 'VGA Asus Dual Radeon RX 6700 XT 12G – 12GB GDDR6 192 Bit là dòng card đồ họa được thiết kế dựa trên bộ vi xử lý đồ họa (GPU) Radeon RX 6700 XT.', 'imagevg6.jpg', '2022-05-25', 5),
+(29, 'ASUS Dual Radeon RX 6700', 22490000, 100, 22000000, 'VGA Asus Dual Radeon RX 6700 XT 12G – 12GB GDDR6 192 Bit là dòng card đồ họa được thiết kế dựa trên bộ vi xử lý đồ họa (GPU) Radeon RX 6700 XT.', 'imagevg4.jpg', '2022-05-25', 5),
 (30, 'PNY SSD CS900 240GB 2.5\" Sata 3', 890000, 100, 0, 'MOỔ cứng SSD đã không còn xa lạ gì với những ai thường xuyên sử dụng máy tính, với những tính năng của nó mang lại SSD đã dần thay thế được HDD trong những chiếc laptop hiện nay.TA', 'imagess1.jpg', '2022-05-25', 6),
 (31, 'SSD SAMSUNG 980 M.2 PCLe NVMe 250GB', 1990000, 100, 1000000, 'Dung lượng 250GB. Chuẩn giao tiếp PCIe Gen 4.0 x4, NVMe 1.3c. Tốc độ đọc Up to 7,000 MB/s', 'imagess2.jpg', '2022-05-25', 6),
 (32, 'SSD SAMSUNG 980 PRO 250GB M.2 NVMe MZ -V8P250BW', 2450000, 100, 2000000, 'Chuẩn SSD: M.2 NVMe Gen3 x4.Tốc độ đọc: 2900 MB/s.Tốc độ ghi: 1300 MB/s', 'imagess3.jpg', '2022-05-25', 6),
@@ -168,7 +221,7 @@ INSERT INTO `linhkien` VALUES
 (38, 'HDD WD Black 1TB 7200rpm', 2000000, 100, 0, 'Cho dù bạn là một nhiếp ảnh gia, biên tập video hay nghệ sĩ kỹ thuật số hoặc muốn xây dựng một hệ thống của riêng bạn, thì WD black chính là giải pháp của bạn.', 'imagehd3.jpg', '2022-05-25', 7),
 (39, 'WD HDD Black 2TB 7200rpm', 3690000, 100, 3000000, 'Ổ cứng HDD 2TB WD Black WD2003FZEX kích thước 3.5 inch, Sata 3 6Gb/s, 7200RPM, 64MB Cache.', 'imagehd4.jpg', '2022-05-25', 7),
 (40, 'HDD Seagate Ironwolf PRO 4TB 7200rpm', 5090000, 100, 0, 'Ổ cứng HDD Seagate Ironwolf Pro 4Tb 7200rpm được thiết kế nhằm phục vụ cho các hệ thống lưu trữ mạng NAS dành cho doanh nghiệp vừa và nhỏ cũng như đám mây cá nhân, hướng đến sự bền bỉ, khả năng mở rộng lưu trữ nhanh chóng cũng như môi trường làm việc liên tục.', 'imagehd5.jpg', '2022-05-25', 7),
-(41, 'HDD Seagate Ironwolf PRO 14TB 7200rpm', 14490000, 100, 0, 'Với chất lượng vượt trội và hiệu năng cao. HDD Seagate  là một sự lựa chọn tối ưu khi bạn muốn nâng cấp ổ cứng.Tối ưu hóa cho NAS với AgileArray™ và khả năng phục hồi lỗi giúp cải thiện chất lượng của ổ cứng hoạt động trong dãy RAID.', 'imagehd6.jpg', '2022-05-25', 7),
+(41, 'HDD Seagate Ironwolf PRO 14TB 7200rpm', 14490000, 82, 0, 'Với chất lượng vượt trội và hiệu năng cao. HDD Seagate  là một sự lựa chọn tối ưu khi bạn muốn nâng cấp ổ cứng.Tối ưu hóa cho NAS với AgileArray™ và khả năng phục hồi lỗi giúp cải thiện chất lượng của ổ cứng hoạt động trong dãy RAID.', 'imagehd6.jpg', '2022-05-25', 7),
 (42, 'Case XIGMATEK AERO 2F', 690000, 100, 600000, 'Case Xigmatek AERO 2F được xem là sản phẩm có kích thước khá nhỏ gọn chỉ 34.5 x 20 x 39 cm. Tuy nhiên, khả năng chứa đựng của nó là điều không thể bàn cãi, bạn hãy yên tâm rằng thùng máy này sẽ chửa đủ và bảo vệ các thiết bị của bạn an toàn nhất có thể.', 'imagevm1.jpg', '2022-05-25', 8),
 (43, 'Case XIGMATEK GAMING X 3FX', 850000, 100, 800000, 'Vỏ case XIGMATEK GAMING X 3FX là thùng máy tính có thiết kế kiểu dáng hiện đại, chắc chắn với khung thép dày 0.5mm và mặt trước dạng lưới (mesh) thoáng khí, đảm bảo nhiệt độ tối ưu cho các linh kiện bên trong. Vách kính cường lực nằm bên trái, thiết kế khung gầm thông gió và luồng không khí cao cấp.', 'imagevm2.jpg', '2022-05-25', 8),
 (44, 'Case MSI MAG VAMPIRIC 100R', 1490000, 100, 1400000, 'Dòng MAG VAMPIRIC 100R luôn ở trạng thái cân bằng, nơi mà các chức năng đáp ứng được liền mạch với thiết kế của vỏ case.', 'imagevm3.jpg', '2022-05-25', 8),
@@ -189,22 +242,22 @@ INSERT INTO `linhkien` VALUES
 (59, 'Tản nhiệt Deepcool Assassin III', 2250000, 100, 0, 'Tản nhiệt khí DEEPCOOL ASSASSIN III được thiết kế với 7 ống dẫn nhiệt Ø6 mm công nghệ sinter mới, quạt kép 140mm độc đáo giúp nâng cao áp suất không khí và giảm tiếng ồn.', 'imagetn6.jpg', '2022-05-25', 10),
 (60, 'Tai nghe DareU EH416 RGB', 350000, 100, 300000, 'DareU EH416 RGB với đèn LED 16.8 triệu màu (tự động chuyển màu). LED được bố trí rất hợp lý hai bên tai nghe với màu trắng đẹp mắt, sáng rõ, bao gồm led viền và Logo rất nổi bật.', 'imagetng1.jpg', '2022-05-25', 11),
 (61, 'Tai nghe HyperX Cloud II RED', 2090000, 100, 2000000, 'Dòng tai nghe Cloud đa năng được thiết kế để phù hợp với nhu cầu chơi game của tất cả mọi người, với tất cả mọi hệ thống, phong cách chơi hoặc phong cách cá nhân.', 'imagetng2.jpg', '2022-05-25', 11),
-(62, 'Tai nghe Gaming Logitech G Pro Gen 2', 2390000, 100, 0,'Tai nghe gaming giá rẻ Logitech G đầu tiên có tên gọi PRO (CHUYÊN NGHIỆP) được thiết kế dưới sự hợp tác với những chuyên gia hàng đầu thế giới. Được làm từ các vật liệu chất lượng cao nhất và có công nghệ tiên tiến, đem lại hiệu suất âm thanh không gì sánh được.', 'imagetng3.jpg', '2022-05-25', 11),
-(63, 'Tai nghe HyperX Cloud Stinger Core', 799000, 100, 790000, 'HyperX Cloud Stinger™ Core được thiết kế dành cho game thủ PC muốn có chất lượng âm thanh tuyệt vời từ một chiếc tai nghe nhẹ. Tai nghe này cung cấp tất cả các tính năng mà game thủ cần từ tai nghe của họ; chất lượng âm thanh tuyệt vời, thoải mái, tiện lợi và đáng tin cậy.', 'imagetng4.jpg', '2022-05-25', 11),
+(62, 'Tai nghe Gaming Logitech G Pro Gen 2', 2390000, 100, 0, 'Tai nghe gaming giá rẻ Logitech G đầu tiên có tên gọi PRO (CHUYÊN NGHIỆP) được thiết kế dưới sự hợp tác với những chuyên gia hàng đầu thế giới. Được làm từ các vật liệu chất lượng cao nhất và có công nghệ tiên tiến, đem lại hiệu suất âm thanh không gì sánh được.', 'imagetng3.jpg', '2022-05-25', 11),
+(63, 'Tai nghe HyperX Cloud Stinger Core', 799000, 94, 790000, 'HyperX Cloud Stinger™ Core được thiết kế dành cho game thủ PC muốn có chất lượng âm thanh tuyệt vời từ một chiếc tai nghe nhẹ. Tai nghe này cung cấp tất cả các tính năng mà game thủ cần từ tai nghe của họ; chất lượng âm thanh tuyệt vời, thoải mái, tiện lợi và đáng tin cậy.', 'imagetng4.jpg', '2022-05-25', 11),
 (64, 'Tai nghe Razer Hammerhead True Wireless Earbuds', 2290000, 100, 0, 'Light up your immersion with the new Razer Hammerhead True Wireless—cutting-edge earbuds destined to dominate the soundstage.', 'imagetng5.jpg', '2022-05-25', 11),
 (65, 'Tai nghe Cooler Master MH710', 990000, 100, 900000, 'Một sự phù hợp không thoải mái có thể làm hỏng tiềm năng của một củ tai chất lượng. MH710 - Tai nghe gaming giá rẻ đảm bảo phù hợp hoàn hảo với nhiều loại khuyên tai với nhiều hình dạng và kích cỡ khác nhau.', 'imagetng6.jpg', '2022-05-25', 11),
 (66, 'Bàn phím Razer Huntsman Mini', 3190000, 100, 0, 'Razer Huntsman Mini Mecury là một trong những bàn phím cơ phiên bản màu trắng thu nhỏ chỉ còn 60% so với Razer Huntsman Mecury.', 'imagebp1.jpg', '2022-05-25', 12),
 (67, 'Bàn phím Razer Blackwidow V3', 3590000, 100, 3000000, 'The name that started it all returns to reassert its dominance. Feel the difference with the Razer BlackWidow V3—backed by a legacy as the first', 'imagebp2.jpg', '2022-05-25', 12),
 (68, 'Bàn phím Razer Blackwidow V3 Pro', 5990000, 100, 5000000, 'The world’s first and most iconic mechanical gaming keyboard makes its next game-changing evolution.', 'imagebp3.jpg', '2022-05-25', 12),
-(69, 'Bàn phím Logitech G813 RGB', 3090000, 100, 3000000, 'G813 là kỳ công kỹ thuật và thiết kế với dáng vẻ tinh tế đến đáng ngạc nhiên và mỏng đến không tưởng mà không đánh đổi về hiệu suất hoặc tính năng.', 'imagebp4.jpg', '2022-05-25', 12),
+(69, 'Bàn phím Logitech G813 RGB', 3090000, 99, 3000000, 'G813 là kỳ công kỹ thuật và thiết kế với dáng vẻ tinh tế đến đáng ngạc nhiên và mỏng đến không tưởng mà không đánh đổi về hiệu suất hoặc tính năng.', 'imagebp4.jpg', '2022-05-25', 12),
 (70, 'Bàn phím Logitech G913 TKL Lightspeed Wireless', 3990000, 100, 0, 'G913 là một chiếc bàn phím cơ giá rẻ đặc biệt dành cho những ai tìm kiếm sự khác biệt. Có thể giá của nó không dễ chịu chút nào nhưng những gì nó đem lại thì thật sự xứng đáng', 'imagebp5.jpg', '2022-05-25', 12),
 (71, 'Bàn phím Leopold FC660MPD Light Pink', 2750000, 100, 2700000, 'Beauty is in the eyes of the beholder” (Vẻ đẹp tùy thuộc vào đôi mắt của người nhìn), câu nói nổi tiếng cho chúng ta thấy quan niệm về cái đẹp và việc đánh giá vẻ đẹp phức tạp đến nhường nào.', 'imagebp6.jpg', '2022-05-25', 12),
 (72, 'Màn hình ViewSonic VX2458-P 24\" 144Hz FreeSync', 4350000, 100, 4300000, 'Với Tần số quét 144Hz nhanh chóng, màn hình này mang lại tính lưu động trực quan tuyệt vời và đồ họa hoàn hảo cho các tựa game hành động và có diễn biến nhanh.', 'imagemh1.jpg', '2022-05-25', 13),
 (73, 'Màn hình Asus TUF GAMING VG249Q 24\" IPS 144Hz FreeSync chuyên game', 5450000, 100, 0, 'Tấm nền IPS 23,8 inch Full HD (1920 X 1080) của TUF Gaming VG249Q mang đến hình ảnh tuyệt đẹp từ mọi góc độ với góc nhìn rộng 178 độ đảm bảo độ méo và thay đổi màu tối thiểu ngay cả khi bạn đang xem từ các vị trí khắc nghiệt.', 'imagemh2.jpg', '2022-05-25', 13),
 (74, 'Màn hình ViewSonic VP2458 24\" IPS chuyên đồ họa', 4500000, 100, 4000000, 'Độ sáng 250 cd/m2 (Typ).Tỷ lệ tương phản 1000:1 (Typ).Độ tương phản động 20,000,000.Khả năng hiển thị màu sắc NTSC: 72.57% / sRGB: 100% / REC709: 100%.Độ sai lệch màu sắc Delta E < 2.Độ phân giải Full HD 1920 x 1080', 'imagemh3.jpg', '2022-05-25', 13),
-(75, 'Màn hình ASUS ProArt PA248QV 24\" IPS 75Hz 16:10 chuyên đồ họa', 5190000, 100, 5000000, 'Màn Hình Chuyên Đồ Họa Asus ProArt PA248QV 24.1'' Tỉ lệ 16:10 WUXGA (1920 x 1200) 5ms/ 75Hz/ IPS/ 100% sRGB/ 100% Rec.709/ Color Accuracy ΔE < 2/ Stereo Speaker (2Wx2) - Hàng Chính Hãng', 'imagemh4.jpg', '2022-05-25', 13),
+(75, 'Màn hình ASUS ProArt PA248QV 24\" IPS 75Hz 16:10 chuyên đồ họa', 5190000, 100, 5000000, 'Màn Hình Chuyên Đồ Họa Asus ProArt PA248QV 24.1\' Tỉ lệ 16:10 WUXGA (1920 x 1200) 5ms/ 75Hz/ IPS/ 100% sRGB/ 100% Rec.709/ Color Accuracy ΔE < 2/ Stereo Speaker (2Wx2) - Hàng Chính Hãng', 'imagemh4.jpg', '2022-05-25', 13),
 (76, 'Màn hình Dell UltraSharp U2721DE 27\" IPS 2K chuyên đồ họa', 10690000, 100, 0, 'Màn hình DELL U2721DE tối ưu hóa không gian làm việc của bạn với màn hình thời trang có cấu hình bảng mỏng, chân đế nhỏ gọn và khe quản lý cáp có thể ẩn máy cắt cáp khỏi tầm nhìn.', 'imagemh5.jpg', '2022-05-25', 13),
-(77, 'Màn hình cong Philips 322M8CZ 32\" VA 165Hz Freesync', 6290000, 100, 6200000, 'Màn hình: IPS - FHD.Curve : 1500R.Kích thước : 32".Độ phân giải : 1920 x 1080.Tần số quét : 165Hz.Thời gian đáp ứng : 1 ms', 'imagemh6.jpg', '2022-05-25', 13),
+(77, 'Màn hình cong Philips 322M8CZ 32\" VA 165Hz Freesync', 6290000, 100, 6200000, 'Màn hình: IPS - FHD.Curve : 1500R.Kích thước : 32\".Độ phân giải : 1920 x 1080.Tần số quét : 165Hz.Thời gian đáp ứng : 1 ms', 'imagemh6.jpg', '2022-05-25', 13),
 (78, 'Chuột Logitech G102 Lightsync RGB Black', 400000, 100, 0, 'Dù có mức giá rất bình dân nhưng Chuột Logitech G102 Lightsync RGB lại được trang bị led  RGB 16,8 triệu màu .Chọn một màu hay trộn 3 màu, hiệu ứng có sẵn hay tạo hiệu ứng của riêng bạn .', 'imagech1.jpg', '2022-05-25', 14),
 (79, 'Chuột Logitech G502 Hero', 990000, 100, 900000, 'G502 HERO có cảm biến quang học tiên tiến cho độ chính xác theo dõi tối đa, tính năng chiếu sáng RGB có thể tùy chỉnh, cấu hình trò chơi tùy chỉnh, từ 200 cho tới 25.600 DPI và các khối nặng có thể đặt lại vị trí.', 'imagech2.jpg', '2022-05-25', 14),
 (80, 'Chuột Logitech G Pro Wireless', 2690000, 100, 2600000, 'Đối với G Pro Wireless Hero 25K được tối ưu hóa để thực hiện những cú flick chuột ở tốc độ trên 400 IPS một cách dễ dàng.', 'imagech3.jpg', '2022-05-25', 14),
@@ -216,30 +269,28 @@ INSERT INTO `linhkien` VALUES
 (86, 'Bộ định tuyến WiFi 6 Asus RT-AX86U Zaku II Gundam Edition', 7390000, 100, 7300000, 'Asus RT-AX86U Zaku II Gundam Edition khoác lên mình bộ giáp của ZAKU II Char Aznable Custom, một trong những cỗ máy chiến đấu trong series phim hoạt hình nổi tiếng của tuổi thơ, Gundam.', 'imagetbm3.jpg', '2022-05-25', 15),
 (87, 'Bộ định tuyến WiFi 6 ASUS RT-AX88U Chuẩn AX6000', 8190000, 100, 8100000, 'ASUS RT-AX88U (Gaming Router) Wifi AX6000 2 băng tần, Wifi 6 (802.11ax), AiMesh 360 WIFI Mesh, AiProtection, USB 3.1 2 băng tần chuẩn cho tổng tốc độ 6000Mbps (2.4Ghz:1148Mbps+ 5GHz: 4804Mbps), 4 ăng-ten rời 5dBi. Cổng: 8 port x 10/100/1000 Lan, 1x 10/100/1000 Wan, 2 x USb 3.1 Vi xử lý Quad-core 1.8Ghz, RAM 1GB, 256MB Flash', 'imagetbm4.jpg', '2022-05-25', 15),
 (88, 'Bộ định tuyến WiFi 6 ASUS RT-AX92U Chuẩn AX6100', 9090000, 100, 9000000, 'Công nghệ AiMesh cho phép bạn thiết lập một hệ thống WiFi mạnh hơn nữa với công nghệ 802.11ax như là đường truyền không dây để truyền dữ liệu giữa hai bộ định tuyến RT-AX92U, đảm bảo WiFi ổn định nhất có thể cho các thiết bị được kết nối.', 'imagetbm5.jpg', '2022-05-25', 15),
-(89, 'Bộ định tuyến WiFi 6 ROG Rapture GT-AX11000 Chuẩn AX11000', 14490000, 100, 0, 'Router wifi ASUS ROG Rapture GT-AX11000 - Bộ định tuyến WiFi 10 Gigabit đầu tiên trên thế giới với chip xử lý lõi tứ, tương thích với PS5, cổng 2.5G, băng tần DFS, wtfast, chế độ Adaptive QoS, AiMesh dành cho hệ thống wifi mesh và bảo mật mạng miễn phí', 'imagetbm6.jpg', '2022-05-25', 15);
+(89, 'Bộ định tuyến WiFi 6 ROG Rapture GT-AX11000 Chuẩn AX11000', 14490000, 99, 0, 'Router wifi ASUS ROG Rapture GT-AX11000 - Bộ định tuyến WiFi 10 Gigabit đầu tiên trên thế giới với chip xử lý lõi tứ, tương thích với PS5, cổng 2.5G, băng tần DFS, wtfast, chế độ Adaptive QoS, AiMesh dành cho hệ thống wifi mesh và bảo mật mạng miễn phí', 'imagetbm6.jpg', '2022-05-25', 15);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `loailinhkien`
---
--- Creation: May 25, 2022 at 03:17 PM
--- Last update: May 25, 2022 at 03:17 PM
+-- Cấu trúc bảng cho bảng `loailinhkien`
 --
 
 DROP TABLE IF EXISTS `loailinhkien`;
-CREATE TABLE `loailinhkien` (
-  `MALLINHKIEN` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `loailinhkien` (
+  `MALLINHKIEN` int(11) NOT NULL AUTO_INCREMENT,
   `TENLLINHKIEN` varchar(20) DEFAULT NULL,
-  `HINHANH` char(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `HINHANH` char(100) DEFAULT NULL,
+  PRIMARY KEY (`MALLINHKIEN`)
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4;
 
 --
 -- RELATIONSHIPS FOR TABLE `loailinhkien`:
 --
 
 --
--- Dumping data for table `loailinhkien`
+-- Đang đổ dữ liệu cho bảng `loailinhkien`
 --
 
 INSERT INTO `loailinhkien` VALUES
@@ -262,95 +313,50 @@ INSERT INTO `loailinhkien` VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `nhanvien`
---
--- Creation: May 25, 2022 at 03:17 PM
--- Last update: May 25, 2022 at 03:17 PM
+-- Cấu trúc bảng cho bảng `nhanvien`
 --
 
 DROP TABLE IF EXISTS `nhanvien`;
-CREATE TABLE `nhanvien` (
+CREATE TABLE IF NOT EXISTS `nhanvien` (
   `MANV` int(11) NOT NULL,
+  `MATKHAU` varchar(100),
   `HOTEN` varchar(20) DEFAULT NULL,
   `GIOITINH` varchar(3) DEFAULT NULL,
   `NGAYSINH` date DEFAULT NULL,
   `DIACHI` varchar(30) DEFAULT NULL,
-  `SODT` int(11) DEFAULT NULL
+  `SODT` int(11) DEFAULT NULL,
+  PRIMARY KEY (`MANV`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- RELATIONSHIPS FOR TABLE `nhanvien`:
 --
 
---
--- Dumping data for table `nhanvien`
---
 
-INSERT INTO `nhanvien` VALUES
-(1, 'Lim Bảo Minh', 'Nam', '2001-05-25', 'TP.HCM', 909452111);
+
 
 --
--- Indexes for dumped tables
+-- Các ràng buộc cho các bảng đã đổ
 --
 
 --
--- Indexes for table `chitiethoadon`
+-- Các ràng buộc cho bảng `chitiethoadon`
 --
 ALTER TABLE `chitiethoadon`
-  ADD PRIMARY KEY (`MAHD`,`MALINHKIEN`),
-  ADD KEY `FK_CHITIETHOADON_SANPHAM` (`MALINHKIEN`);
+  ADD CONSTRAINT `FK_CHITIETHOADON_SANPHAM` FOREIGN KEY (`MALINHKIEN`) REFERENCES `linhkien` (`MALINHKIEN`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_CTHD_HOADON` FOREIGN KEY (`MAHD`) REFERENCES `hoadon` (`MAHD`),
+  ADD CONSTRAINT `chitiethoadon_ibfk_1` FOREIGN KEY (`MAHD`) REFERENCES `hoadon` (`MAHD`);
+
 
 --
--- Indexes for table `hoadon`
+-- Các ràng buộc cho bảng `hoadon`
 --
 ALTER TABLE `hoadon`
-  ADD PRIMARY KEY (`MAHD`),
-  ADD KEY `FK_HOADON_KHACHHANG` (`MAKH`);
+  ADD CONSTRAINT `FK_HOADON_KHACHHANG` FOREIGN KEY (`MAKH`) REFERENCES `khachhang` (`USERNAME`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `hoadon_ibfk_1` FOREIGN KEY (`MAKH`) REFERENCES `khachhang` (`USERNAME`);
 
 --
--- Indexes for table `khachhang`
---
-ALTER TABLE `khachhang`
-  ADD PRIMARY KEY (`USERNAME`);
-
---
--- Indexes for table `linhkien`
---
-ALTER TABLE `linhkien`
-  ADD PRIMARY KEY (`MALINHKIEN`),
-  ADD KEY `FK_LINHKIEN_LOAILINHKIEN` (`MALLINHKIEN`);
-
---
--- Indexes for table `loailinhkien`
---
-ALTER TABLE `loailinhkien`
-  ADD PRIMARY KEY (`MALLINHKIEN`);
-
---
--- Indexes for table `nhanvien`
---
-ALTER TABLE `nhanvien`
-  ADD PRIMARY KEY (`MANV`);
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `chitiethoadon`
---
-ALTER TABLE `chitiethoadon`
-  ADD CONSTRAINT `FK_CHITIETHOADON_HOADON` FOREIGN KEY (`MAHD`) REFERENCES `hoadon` (`MAHD`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_CHITIETHOADON_SANPHAM` FOREIGN KEY (`MALINHKIEN`) REFERENCES `linhkien` (`MALINHKIEN`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Constraints for table `hoadon`
---
-ALTER TABLE `hoadon`
-  ADD CONSTRAINT `FK_HOADON_KHACHHANG` FOREIGN KEY (`MAKH`) REFERENCES `khachhang` (`USERNAME`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Constraints for table `linhkien`
+-- Các ràng buộc cho bảng `linhkien`
 --
 ALTER TABLE `linhkien`
   ADD CONSTRAINT `FK_LINHKIEN_LOAILINHKIEN` FOREIGN KEY (`MALLINHKIEN`) REFERENCES `loailinhkien` (`MALLINHKIEN`) ON DELETE NO ACTION ON UPDATE NO ACTION;

@@ -3,15 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:background="@drawable/edit_text_bg">
+    android:background="@drawable/background_item_product">
 
     <TextView
         android:id="@+id/titleNameProductOrderDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:text="Tên"
-        android:textSize="25dp" />
+        android:text="Tên:"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/titleQuantityOrderDetail"
@@ -19,8 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/titleNameProductOrderDetail"
         android:layout_marginBottom="10dp"
-        android:text="Số lượng"
-        android:textSize="25dp"
+        android:text="Số lượng:"
+        android:textSize="20sp"
 
         />
 
@@ -28,22 +28,19 @@
         android:id="@+id/titlePriceOrderDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_row="0"
-        android:layout_column="2"
         android:layout_below="@id/titleQuantityOrderDetail"
         android:layout_marginBottom="10dp"
-        android:text="Giá"
-        android:textSize="25dp" />
+        android:text="Giá:"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/titleTotalOrderDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_row="0"
-        android:layout_column="2"
+
         android:layout_below="@id/titlePriceOrderDetail"
-        android:text="Tổng tiền"
-        android:textSize="25dp"
+        android:text="Tổng tiền:"
+        android:textSize="20sp"
 
         />
 
@@ -52,12 +49,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@id/titleNameProductOrderDetail"
         android:layout_marginLeft="10dp"
-        android:maxLines="1"
+        android:layout_toRightOf="@id/titleNameProductOrderDetail"
         android:ellipsize="end"
+        android:maxLines="1"
         android:text="asudfjasklllllllllllllllllllllllllllllllllllllllllllldafljljlkj"
-        android:textSize="25dp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/quantityOrderDetail"
@@ -66,8 +63,17 @@
         android:layout_below="@id/titleNameProductOrderDetail"
         android:layout_alignParentRight="true"
         android:text="34"
-        android:textSize="25dp" />
-
+        android:textSize="20sp" />
+    <TextView
+        android:id="@+id/unitPriceOrderDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="đ"
+        android:textSize="15.5sp"
+        android:layout_below="@id/titleQuantityOrderDetail"
+        android:layout_toLeftOf="@id/priceOrderDetail"
+        android:layout_marginTop="5dp"
+        />
     <TextView
         android:id="@+id/priceOrderDetail"
         android:layout_width="wrap_content"
@@ -75,10 +81,20 @@
         android:layout_below="@id/titleQuantityOrderDetail"
         android:layout_alignParentRight="true"
         android:text="3432423"
-        android:textSize="25dp"
+        android:textSize="20sp"
 
         />
 
+    <TextView
+        android:id="@+id/unitTotalOrderDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="đ"
+        android:textSize="15.5sp"
+        android:layout_below="@id/titlePriceOrderDetail"
+        android:layout_toLeftOf="@id/totalOrderDetail"
+        android:layout_marginTop="5dp"
+        />
     <TextView
         android:id="@+id/totalOrderDetail"
         android:layout_width="wrap_content"
@@ -86,7 +102,6 @@
         android:layout_below="@id/titlePriceOrderDetail"
         android:layout_alignParentRight="true"
         android:text="3432423"
-        android:textSize="25dp"
-
+        android:textSize="20sp"
         />
 </RelativeLayout>

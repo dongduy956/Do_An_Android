@@ -3,6 +3,7 @@ package com.example.do_an_android.Adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +46,18 @@ ArrayList<ProductModel> arrayList;
         ProductModel productModel=arrayList.get(position);
         Picasso.get().load(Server.urlImage+productModel.getImage()).into(holder.imageProductOfType);
         holder.nameProductOfType.setText(productModel.getName());
-        holder.priceProductOfType.setText(Support.ConvertMoney(productModel.getPrice()));
+        if(productModel.getPrice_discounted()>0)
+        {
+            holder.priceSaleProductOfType.setText(Support.ConvertMoney(productModel.getPrice_discounted()));
+            holder.priceProductOfType.setText(Support.ConvertMoney(productModel.getPrice()));
+            holder.unitPriceProductOfType.setText("đ");
+        }
+        else
+        {
+            holder.unitPriceProductOfType.setText("");
+            holder.priceProductOfType.setText("");
+            holder.priceSaleProductOfType.setText(Support.ConvertMoney(productModel.getPrice()));
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,13 +78,21 @@ ArrayList<ProductModel> arrayList;
     public static class ViewProductOfType extends RecyclerView.ViewHolder{
 
         ImageView imageProductOfType;
-        TextView nameProductOfType,priceProductOfType;
+        TextView nameProductOfType,priceSaleProductOfType,unitPriceSaleProductOfType
+                ,unitPriceProductOfType,priceProductOfType;
 
         public ViewProductOfType(@NonNull View itemView) {
             super(itemView);
             imageProductOfType = itemView.findViewById(R.id.imageProductOfType);
             nameProductOfType = itemView.findViewById(R.id.nameProductOfType);
+            priceSaleProductOfType=itemView.findViewById(R.id.priceSaleProductOfType);
+            unitPriceSaleProductOfType=itemView.findViewById(R.id.unitPriceSaleProductOfType);
+            unitPriceProductOfType=itemView.findViewById(R.id.unitPriceProductOfType);
             priceProductOfType=itemView.findViewById(R.id.priceProductOfType);
+            unitPriceProductOfType.setPaintFlags(unitPriceProductOfType.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+            unitPriceSaleProductOfType.setPaintFlags(unitPriceSaleProductOfType.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+            priceProductOfType.setPaintFlags(priceProductOfType.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+
         }
     }
 }

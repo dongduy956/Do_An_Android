@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:background="@drawable/edit_text_bg">
+    android:background="@drawable/background_item_product">
 
     <TextView
         android:id="@+id/titleCodeOrderOfCustomer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mã hoá đơn"
-        android:textSize="25dp"
+        android:text="Mã hoá đơn:"
+        android:textSize="20sp"
         android:layout_marginBottom="10dp"
         />
 
@@ -19,8 +19,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/titleCodeOrderOfCustomer"
-        android:text="Ngày lập"
-        android:textSize="25dp"
+        android:text="Ngày lập:"
+        android:textSize="20sp"
         android:layout_marginBottom="10dp"
 
         />
@@ -29,11 +29,10 @@
         android:id="@+id/titleTotalOrderOfCustomer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_row="0"
-        android:layout_column="2"
+
         android:layout_below="@id/titleDateOrderOfCustomer"
-        android:text="Tổng tiền"
-        android:textSize="25dp"
+        android:text="Tổng tiền:"
+        android:textSize="20sp"
 
         />
 
@@ -43,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:text="Mã hoá đơn"
-        android:textSize="25dp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/dateOrderOfCustomer"
@@ -52,16 +51,25 @@
         android:layout_below="@id/titleCodeOrderOfCustomer"
         android:layout_alignParentRight="true"
         android:text="Ngày lập"
-        android:textSize="25dp" />
-
+        android:textSize="20sp" />
+    <TextView
+        android:id="@+id/unitTotalOrderOfCustomer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="đ"
+        android:textSize="15.5sp"
+        android:layout_below="@id/titleDateOrderOfCustomer"
+        android:layout_toLeftOf="@id/totalOrderOfCustomer"
+        android:layout_marginTop="5dp"
+        />
     <TextView
         android:id="@+id/totalOrderOfCustomer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/titleDateOrderOfCustomer"
         android:layout_alignParentRight="true"
-        android:text="Tổng tiền"
-        android:textSize="25dp"
+        android:text="200000"
+        android:textSize="20sp"
 
         />
 </RelativeLayout>

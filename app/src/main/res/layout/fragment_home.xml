@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="._Fragment.HomeFragment">
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -20,8 +20,7 @@
                 android:id="@+id/toolbarmain"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
-                app:title="Trang chủ"
-                >
+                app:title="Trang chủ">
 
                 <androidx.appcompat.widget.SearchView
                     android:id="@+id/searchview"
@@ -77,7 +76,7 @@
                         android:textSize="14sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/circleindicator" />
-<!--Type product-->
+                    <!--Type product-->
                     <TextView
                         android:id="@+id/txtTypeProduct"
                         android:layout_width="wrap_content"
@@ -90,6 +89,7 @@
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
+
                     <TextView
                         android:id="@+id/allCategoryMore"
                         android:layout_width="wrap_content"
@@ -101,6 +101,7 @@
                         app:layout_constraintBottom_toBottomOf="@+id/txtTypeProduct"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/txtTypeProduct" />
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/categoryRecycler"
                         android:layout_width="0dp"
@@ -111,7 +112,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/allCategoryMore" />
 
 
-<!--Discount-->
+                    <!--Discount-->
                     <TextView
                         android:id="@+id/txtDiscount"
                         android:layout_width="wrap_content"
@@ -127,16 +128,18 @@
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/discountedRecycler"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/txtDiscount" />
 
 
-<!--Recently-->
+                    <!--Recently-->
                     <TextView
                         android:id="@+id/txtRecently"
                         android:layout_width="wrap_content"
@@ -151,6 +154,8 @@
                         app:layout_constraintTop_toBottomOf="@+id/discountedRecycler" />
 
                     <androidx.recyclerview.widget.RecyclerView
+                        android:paddingLeft="2dp"
+                        android:paddingRight="2dp"
                         android:id="@+id/recently_item"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

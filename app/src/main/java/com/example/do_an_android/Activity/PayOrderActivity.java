@@ -2,15 +2,18 @@ package com.example.do_an_android.Activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.splashscreen.SplashScreen;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,11 +42,12 @@ import java.util.Map;
 
 public class PayOrderActivity extends AppCompatActivity {
     EditText name_order, address_order, phone_order;
-    TextView sumProductConfirm, totalConfirm;
+    TextView sumProductConfirm, totalConfirm,unitMoneyPayOrderTotal;
     Button btnConfirmOrder;
     SharedPreferences sharedPreferencesCart, sharedPreferencesUser;
     ArrayList<CartModel> lstCart;
     String username;
+    ImageView backPayOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +110,15 @@ public class PayOrderActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 insertOrder();
+            }
+        });
+        backPayOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getApplicationContext(),MainActivity.class);
+                intent.putExtra("checkBuyNow",true);
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -218,5 +231,9 @@ public class PayOrderActivity extends AppCompatActivity {
         sumProductConfirm = findViewById(R.id.sumProductConfirm);
         totalConfirm = findViewById(R.id.totalConfirm);
         btnConfirmOrder = findViewById(R.id.btnConfirmOrder);
+        backPayOrder = findViewById(R.id.backPayOrder);
+        unitMoneyPayOrderTotal = findViewById(R.id.unitMoneyPayOrderTotal);
+        unitMoneyPayOrderTotal.setPaintFlags(unitMoneyPayOrderTotal.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+
     }
 }

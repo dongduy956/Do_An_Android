@@ -72,7 +72,7 @@ public class DiscountedProductAdapter extends RecyclerView.Adapter<DiscountedPro
     public static class DiscountedProductViewHolder extends RecyclerView.ViewHolder {
 
         ImageView discountImageView;
-        TextView discountName,discountPrice,discountSalePrice;
+        TextView discountName,discountPrice,discountSalePrice,unitMoneyPriceDiscounted,unitMoneyPriceSaleDiscounted;
 
         public DiscountedProductViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,7 +80,11 @@ public class DiscountedProductAdapter extends RecyclerView.Adapter<DiscountedPro
             discountName = itemView.findViewById(R.id.productNameDiscount);
             discountPrice=itemView.findViewById(R.id.productPriceDiscount);
             discountSalePrice=itemView.findViewById(R.id.productPriceSaleDiscount);
+            unitMoneyPriceSaleDiscounted=itemView.findViewById(R.id.unitMoneyPriceSaleDiscounted);
+            unitMoneyPriceDiscounted=itemView.findViewById(R.id.unitMoneyPriceDiscounted);
             discountPrice.setPaintFlags(discountPrice.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+            unitMoneyPriceSaleDiscounted.setPaintFlags(unitMoneyPriceSaleDiscounted.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+            unitMoneyPriceDiscounted.setPaintFlags(unitMoneyPriceDiscounted.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
         }
     }
 }

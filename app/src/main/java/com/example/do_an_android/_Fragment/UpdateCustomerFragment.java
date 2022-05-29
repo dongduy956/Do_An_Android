@@ -73,10 +73,11 @@ public class UpdateCustomerFragment extends Fragment implements View.OnClickList
     SharedPreferences sharedPreferencesUser;
     String username;
     Dialog dialog;
-    String image="";
-String realPath="";
-ImageView imageUpdateCustomer;
-    private static final int  REQUEST_CODE_IMAGE_UPDATE=714;
+    String image = "";
+    String realPath = "";
+    ImageView imageUpdateCustomer;
+    private static final int REQUEST_CODE_IMAGE_UPDATE = 714;
+
     public UpdateCustomerFragment(Context context) {
         this.context = context;
     }
@@ -111,7 +112,7 @@ ImageView imageUpdateCustomer;
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    image=response.getString("image");
+                    image = response.getString("image");
                     Picasso.get().load(Server.urlImage + image).into(imageCustomer);
                     name_updateCustomer.setText(response.getString("name"));
                     address_updateCustomer.setText(response.getString("address"));
@@ -168,10 +169,10 @@ ImageView imageUpdateCustomer;
                 else
                     changePass();
                 break;
-            case  R.id.imageUpdateCustomer:
-                if(context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED) {
+            case R.id.imageUpdateCustomer:
+                if (context.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     //xin quyen
-                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},111);
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 111);
                 } else {
                     Intent intent = new Intent(Intent.ACTION_PICK);
                     intent.setType("image/*");
@@ -180,11 +181,11 @@ ImageView imageUpdateCustomer;
                 break;
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode==111 &&grantResults[0]== PackageManager.PERMISSION_GRANTED)
-        {
+        if (requestCode == 111 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType("image/*");
             startActivityForResult(intent, REQUEST_CODE_IMAGE_UPDATE);
@@ -202,6 +203,12 @@ ImageView imageUpdateCustomer;
                 else {
                     Toast.makeText(context, "Đổi mật khẩu thành công.", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
+                    sharedPreferencesUser.edit().clear().commit();
+                    Intent intent=new Intent(context, MainActivity.class);
+                    intent.putExtra("checkChangpass",true);
+                    startActivity(intent);
+
+
                 }
 
 
@@ -251,6 +258,7 @@ ImageView imageUpdateCustomer;
         }
         return false;
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == REQUEST_CODE_IMAGE_UPDATE && resultCode == ((Activity) context).RESULT_OK && data != null) {
@@ -268,6 +276,7 @@ ImageView imageUpdateCustomer;
         super.onActivityResult(requestCode, resultCode, data);
 
     }
+
     public String getRealPathFromURI(Uri contentUri) {
         String path = null;
         String[] proj = {MediaStore.MediaColumns.DATA};
@@ -279,6 +288,7 @@ ImageView imageUpdateCustomer;
         cursor.close();
         return path;
     }
+
     private void updateInfoCustomer() {
         if (validateEditText(name_updateCustomer, "Tên khách hàng không được rỗng.")
                 || validateEditText(address_updateCustomer, "Địa chỉ không được rỗng.")
@@ -289,7 +299,7 @@ ImageView imageUpdateCustomer;
         try {
             String[] arrayNameFile = file_path.split("\\.");
             file_path = arrayNameFile[0] + System.currentTimeMillis() + "." + arrayNameFile[1];
-        }catch (Exception ex){
+        } catch (Exception ex) {
 
         }
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
@@ -299,9 +309,8 @@ ImageView imageUpdateCustomer;
         callback.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
-                if(response!=null)
-                {
-                    image =response.body();
+                if (response != null) {
+                    image = response.body();
                     updateTextCustomer();
                 }
             }

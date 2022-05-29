@@ -12,10 +12,9 @@
         android:gravity="center"
         android:padding="10dp"
         android:text="Danh sách đơn hàng của tài khoản dongduy"
-        android:textAllCaps="true"
-        android:textColor="#FF0000"
-        android:textSize="25dp"
-        android:textStyle="bold" />
+
+        android:textColor="@color/orange"
+        android:textSize="25dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleviewOrderOfCustomer"

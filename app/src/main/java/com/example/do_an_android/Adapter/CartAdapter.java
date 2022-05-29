@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Paint;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -142,7 +143,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     public static class CartViewHolder extends RecyclerView.ViewHolder {
 
         ImageView image;
-        TextView name, price, subtotal;
+        TextView name, price, subtotal,unitMoneyItemCartPrice,unitMoneyItemCartSubtotal;
         EditText quantity;
 
         public CartViewHolder(@NonNull View itemView) {
@@ -152,6 +153,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             price = itemView.findViewById(R.id.price_deatail_cart);
             subtotal = itemView.findViewById(R.id.subtotal_detail_cart);
             quantity = itemView.findViewById(R.id.quantity_detail_cart);
+            unitMoneyItemCartPrice = itemView.findViewById(R.id.unitMoneyItemCartPrice);
+            unitMoneyItemCartSubtotal = itemView.findViewById(R.id.unitMoneyItemCartSubtotal);
+            unitMoneyItemCartPrice.setPaintFlags(unitMoneyItemCartPrice.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+            unitMoneyItemCartSubtotal.setPaintFlags(unitMoneyItemCartSubtotal.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+
         }
     }
 }

@@ -2,23 +2,33 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/edit_text_bg"
     >
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Đổi mật khẩu"
-    android:gravity="center"
-    android:background="#BCBCBC"
-    android:textColor="#fff"
-    android:padding="10dp"
-    android:textSize="30dp"
-    android:textStyle="bold"
-    android:textAllCaps="true"
-    android:id="@+id/titleChangepass"
-    />
 <RelativeLayout
-    android:layout_below="@id/titleChangepass"
+    android:id="@+id/layoutChangepass"
+
+    android:layout_width="match_parent"
+    android:layout_height="?android:actionBarSize">
+    <ImageView
+        android:id="@+id/iconChangePass"
+        android:layout_marginLeft="30dp"
+        android:layout_height="match_parent"
+        android:layout_width="45dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/icon"
+        />
+
+    <TextView
+        android:id="@+id/titleChangepass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/iconChangePass"
+        android:padding="10dp"
+        android:text="Đổi mật khẩu"
+        android:textSize="25dp"
+        />
+</RelativeLayout>
+<RelativeLayout
+    android:layout_below="@id/layoutChangepass"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
